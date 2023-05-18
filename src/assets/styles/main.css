@@ -1,0 +1,212 @@
+body {
+  background: #f6f6f6;
+  /* padding: 0 0 30px 0;
+    background-color: #fafafa;
+    letter-spacing: -0.3px;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 400;
+    font-family: open sans, Helvetica, Arial, sans-serif; */
+  font-size: 16px;
+  font-family: "Nunito", sans-serif;
+}
+
+/* signin */
+.signin {
+  margin: 0;
+}
+
+.signin-button {
+  display: block;
+  margin: 0 auto;
+  background: #ff9138;
+  color: #ffffff;
+  width: 162px;
+  height: 40px;
+}
+
+.signin-cancel {
+  border-color: #ff9138;
+  color: #ff9138;
+  width: 162px;
+  height: 40px;
+}
+
+.sign-img img {
+  width: 100%;
+  max-width: 605px;
+  padding-top: 110px;
+  padding-bottom: 100px;
+  padding-left: 79px;
+}
+
+.signin h1 {
+  font-size: 36px;
+  font-weight: 900;
+  color: #ff7506;
+}
+
+.signin h2 {
+  font-size: 34px;
+  font-weight: 400;
+  color: #ff7506;
+}
+
+.signin h3 {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #282739;
+}
+
+.signin-text div {
+  position: absolute;
+  right: 30px;
+  top: 407px;
+}
+
+.row-col {
+  margin-left: 94px;
+  margin-right: 94px;
+}
+
+.logo img {
+  display: block;
+  margin: 0 auto;
+  padding: 75px;
+}
+
+.ant-input {
+  height: 44px;
+}
+
+.ant-input-password {
+  padding: 0px 10px;
+}
+
+.text-red {
+  color: #e73f3f;
+}
+
+.text-orange {
+  color: #ff7506;
+}
+
+/* sidenav */
+.layout-dashboard .ant-layout-sider .ant-layout-sider-children {
+  width: 200px;
+  position: fixed;
+  left: 0;
+  z-index: 99;
+  height: 100vh;
+  margin: 0;
+  background: #ffffff;
+}
+
+.layout-dashboard .ant-layout-sider .ant-layout-sider-children .brand img {
+  height: 64px;
+  margin: 32px 60px 54px;
+}
+
+.layout-dashboard .ant-menu {
+  background: transparent;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item .icon,
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu .icon,
+.label {
+  display: inline-flex;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.layout-dashboard
+  .ant-layout-sider
+  .ant-layout-sider-children
+  .ant-menu
+  .ant-menu-item.ant-menu-item-selected {
+  background: #ff7506;
+  color: #ffffff;
+  width: 100%;
+  border-radius: 0;
+  margin-left: 0;
+}
+
+.layout-dashboard
+  .ant-layout-sider
+  .ant-layout-sider-children
+  .ant-menu
+  .ant-menu-item.ant-menu-item-selected
+  svg
+  path {
+  stroke: #ffffff;
+}
+
+.layout-dashboard
+  .ant-layout-sider
+  .ant-layout-sider-children
+  .ant-menu
+  .ant-menu-item {
+  width: 100%;
+  border-radius: 0;
+  margin-left: 0;
+}
+
+.layout-dashboard
+  .ant-layout-sider
+  .ant-layout-sider-children
+  .ant-menu
+  .ant-menu-item
+  a {
+  width: 100%;
+  border-radius: 0;
+  margin-left: 0;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .aside-footer {
+  display: block;
+  margin: 230px auto 30px;
+  height: 48px;
+  background: #fff2e7;
+  color: #ff7506;
+  box-shadow: none;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .aside-footer .icon,
+.label {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+}
+
+/* header */
+.layout-dashboard .ant-layout-header {
+  background: transparent;
+  height: auto;
+  padding: 16px;
+  margin: 10px 24px;
+  line-height: inherit;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+.layout-dashboard .header-control {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.layout-dashboard .ant-affix .ant-layout-header {
+  background: #fff;
+  box-shadow: 0 20px 27px rgb(0 0 0 / 5%);
+  margin: 10px 20px;
+  z-index: 10;
+}
+
+.ant-row {
+  margin-left: -12px;
+  margin-right: -12px;
+}
