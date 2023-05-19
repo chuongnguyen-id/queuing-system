@@ -1,5 +1,5 @@
 import { Menu, Button } from "antd";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
 import {
   dashboard,
@@ -11,87 +11,69 @@ import {
   logout,
 } from "./Icon";
 
-function Sidenav() {
-  const { pathname } = useLocation();
-  const page = pathname.replace("/", "");
+interface SidenavProps {
+  setPath: any;
+}
 
+function Sidenav(props: SidenavProps) {
+  const handleOnClick = (path: string) => {
+    props.setPath(path);
+  };
   return (
     <>
       <div className="brand">
         <img src={logo} alt="" />
       </div>
-      <Menu mode="inline">
-        <Menu.Item key="1">
-          <NavLink to="/dashboard">
-            <span
-              className="icon"
-              style={{
-                background: page === "dashboard" ? "" : "",
-              }}
+      <Menu mode="inline" defaultSelectedKeys={["1"]}>
+        {[
+          {
+            key: "1",
+            to: "/dashboard",
+            icon: dashboard,
+            label: "Dashboard",
+          },
+          {
+            key: "2",
+            to: "/thiet-bi",
+            icon: devices,
+            label: "Thiết bị",
+          },
+          {
+            key: "3",
+            to: "/dich-vu",
+            icon: services,
+            label: "Dịch vụ",
+          },
+          {
+            key: "4",
+            to: "/cap-so",
+            icon: ordinalNumbers,
+            label: "Cấp số",
+          },
+          {
+            key: "5",
+            to: "/bao-cao",
+            icon: report,
+            label: "Báo cáo",
+          },
+          {
+            key: "6",
+            to: "/cai-dat",
+            icon: setting,
+            label: "Cài đặt hệ thống",
+          },
+        ].map((item) => (
+          <Menu.Item key={item.key}>
+            <NavLink
+              key={item.key}
+              to={item.to}
+              onClick={() => handleOnClick(item.label)}
             >
-              {dashboard}
-            </span>
-            <span className="label">Dashboard</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="2">
-          <NavLink to="/thiet-bi">
-            <span
-              className="icon"
-              style={{
-                background: page === "devices" ? "" : "",
-              }}
-            >
-              {devices}
-            </span>
-            <span className="label">Thiết bị</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="3">
-          <NavLink to="/dich-vu">
-            <span
-              className="icon"
-              style={{
-                background: page === "services" ? "" : "",
-              }}
-            >
-              {services}
-            </span>
-            <span className="label">Dịch vụ</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="4">
-          <NavLink to="/cap-so">
-            <span
-              className="icon"
-              style={{
-                background: page === "ordinalNumbers" ? "" : "",
-              }}
-            >
-              {ordinalNumbers}
-            </span>
-            <span className="label">Cấp số</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="6">
-          <NavLink to="/bao-cao">
-            <span
-              className="icon"
-              style={{
-                background: page === "report" ? "" : "",
-              }}
-            >
-              {report}
-            </span>
-            <span className="label">Báo cáo</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="7">
-          <NavLink to="/cai-dat">
-            <span className="icon">{setting}</span>
-            <span className="label">Cài đặt hệ thống</span>
-          </NavLink>
-        </Menu.Item>
+              <span className="icon">{item.icon}</span>
+              <span className="label">{item.label}</span>
+            </NavLink>
+          </Menu.Item>
+        ))}
       </Menu>
       <Button type="primary" className="aside-footer">
         <span className="icon">{logout}</span>
