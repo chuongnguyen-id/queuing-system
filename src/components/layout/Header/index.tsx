@@ -4,7 +4,6 @@ import { Row, Col, Breadcrumb, Badge, Dropdown, List } from "antd";
 
 import { Link } from "react-router-dom";
 import profile from "../../../assets/images/avatar.png";
-import styled from "styled-components";
 
 interface HeaderProps {
   name: string;
@@ -32,68 +31,44 @@ const bell = [
 
 const data = [
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa afsdsffdf adsda asdasdasdsd",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Nguyễn Thị Thùy Dung",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "Lê Quỳnh Ái Vân",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Nguyễn Thị Thùy Dung",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Võ Thị Kim Liên",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Hoàng Nguyễn Quốc Huy",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Võ Ngọc Lan Anh",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Nguyễn Thị Trúc Anh",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Nguyễn Trường Toản",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Phan Quốc Học",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Phan Thị Lệ",
+    description: "12h20 ngày 30/11/2021",
   },
   {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
-  },
-  {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
-  },
-  {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
-  },
-  {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
-  },
-  {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
-  },
-  {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
-  },
-  {
-    title: "aaaa aaaaaaaa aaaaaaaa aaaaaa",
-    description: "bbbb bbbbbb bbbbbbbbb",
+    title: "Nguyễn Kim Kiều",
+    description: "12h20 ngày 30/11/2021",
   },
 ];
 
@@ -114,39 +89,18 @@ const menu = (
   />
 );
 
-// function getTitle(pathname: string) {
-//   switch (pathname) {
-//     case "dashboard":
-//       return "Dashboard";
-//     case "thiet-bi":
-//       return "Thiết bị";
-//     case "dich-vu":
-//       return "Dịch vụ";
-//     case "cap-so":
-//       return "Cấp số";
-//     case "bao-cao":
-//       return "Báo cáo";
-//     case "cai-dat":
-//       return "Cài đặt";
-//     default:
-//       return "";
-//   }
-// }
-
 function Header({ name }: HeaderProps) {
-  // const title = getTitle(name);
-
   useEffect(() => window.scrollTo(0, 0));
 
   return (
     <>
-      <Row gutter={[24, 0]}>
-        <Col span={24} md={6}>
+      <Row>
+        <Col span={6}>
           <Breadcrumb>
             <Breadcrumb.Item>{name.replace("/", " > ")}</Breadcrumb.Item>
           </Breadcrumb>
         </Col>
-        <Col span={24} md={18} className="header-control">
+        <Col span={18} className="header-control">
           <Link to="/dang-nhap" className="btn-profile">
             <img src={profile} alt="" />
             <div>
@@ -154,7 +108,7 @@ function Header({ name }: HeaderProps) {
               <div>Lê Quỳnh Ái Vân</div>
             </div>
           </Link>
-          <Badge size="small" count={4}>
+          <Badge size="small" count={data.length}>
             <Dropdown overlay={menu} trigger={["click"]}>
               <a
                 href="#pablo"

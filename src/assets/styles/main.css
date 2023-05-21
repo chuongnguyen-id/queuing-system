@@ -4,6 +4,12 @@ body {
   font-family: "Nunito", sans-serif;
 }
 
+@media (min-width: 992px) {
+  .layout-dashboard {
+    overflow: auto;
+  }
+}
+
 /* --------------------------------Sign In-------------------------------- */
 .signin {
   margin: 0;
@@ -179,7 +185,7 @@ body {
 .layout-dashboard .ant-layout-header {
   background: transparent;
   height: auto;
-  margin: 24px 0;
+  margin: 24px 0 0;
   line-height: inherit;
   border-radius: 12px;
   transition: 0.2s;
@@ -227,7 +233,7 @@ body {
   margin-right: -12px;
 }
 
-/* --------------------------------Header Dropdown-------------------------------- */
+/* --------------------------------Header_Dropdown-------------------------------- */
 .ant-dropdown {
   margin: 0;
 }
@@ -278,4 +284,62 @@ body {
   color: #ffffff;
   font-size: 20px;
   font-weight: 700px;
+}
+
+/* --------------------------------Home-------------------------------- */
+.ant-layout.ant-layout-has-sider > .ant-layout,
+.ant-layout.ant-layout-has-sider > .ant-layout-content {
+  overflow-x: hidden;
+}
+
+.layout-content {
+  margin: 28px;
+}
+
+.layout-content .ant-row .ant-col .ant-card.cardbox {
+  /* width: 186px;
+  height: 120px; */
+  margin: 8px 0;
+  width: 100%;
+}
+
+.layout-content .ant-row .ant-card .number-title {
+  display: flex;
+  align-items: center;
+}
+
+.layout-content .ant-row .ant-card .number-title .icon-box {
+  margin-right: 12px;
+}
+
+.layout-content .ant-row .ant-card .number {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  color: #535261;
+  margin-bottom: 0;
+}
+
+.uptext {
+  color: #ff9138;
+  font-weight: 400;
+  font-size: 8px;
+  background-color: rgba(255, 149, 1, 0.15);
+  border-radius: 7.18115px;
+  padding: 3px 5px;
+}
+
+.downtext {
+  color: #e73f3f;
+  font-weight: 400;
+  font-size: 8px;
+  background-color: rgba(231, 63, 63, 0.15);
+  border-radius: 7.18115px;
+  padding: 3px 5px;
+}
+
+.linechart {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
