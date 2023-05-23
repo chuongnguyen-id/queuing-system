@@ -7,10 +7,10 @@ function LineChart() {
 
   return (
     <>
-      <div className="linechart">
+      <div className="titlechart">
         <div>
           <Title level={5}>Bảng thống kê theo ngày</Title>
-          <Paragraph className="lastweek">Tháng 11/2021</Paragraph>
+          <Paragraph>Tháng 11/2021</Paragraph>
         </div>
         <div className="sales">
           Xem theo{" "}
@@ -25,14 +25,12 @@ function LineChart() {
           />
         </div>
       </div>
-
       <ReactApexChart
-        className="full-width"
-        options={lineChart.options}
+        options={lineChart}
         series={lineChart.series}
         type="area"
         height={350}
-        width={"100%"}
+        width={810}
       />
     </>
   );
