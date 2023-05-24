@@ -2,7 +2,7 @@ import ReactApexChart from "react-apexcharts";
 import { Select, Typography } from "antd";
 import lineChart from "./configs/lineChart";
 
-function LineChart() {
+const LineChart = () => {
   const { Title, Paragraph } = Typography;
 
   return (
@@ -34,6 +34,6 @@ function LineChart() {
       />
     </>
   );
-}
+};
 
 export default LineChart;

@@ -314,9 +314,10 @@ body {
 .layout-content .ant-row .ant-col .ant-card.cardbox-right {
   position: absolute;
   bottom: 0;
-  padding: 65px 0px 29px;
+  padding: 85px 0px 29px;
   width: 101%;
-  height: 750px;
+  height: 780px;
+  overflow-y: hidden;
 }
 
 .layout-content .ant-row .ant-col .ant-card.cardbox-title {
@@ -418,4 +419,56 @@ body {
 
 .ordinalnumber.item div:last-child::before {
   color: #f178b6;
+}
+
+.react-calendar {
+  padding: 16px 10px;
+  font-family: "Nunito";
+  width: 100%;
+  border: none;
+  box-shadow: 2px 2px 15px rgba(70, 64, 67, 0.1);
+  border-radius: 12px;
+}
+
+.react-calendar__navigation {
+  padding: 0 36px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ff7506;
+}
+
+.react-calendar__viewContainer {
+  padding: 0 36px;
+}
+
+.react-calendar .react-calendar__month-view__weekdays {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff9138;
+  text-decoration: none !important;
+}
+
+.react-calendar .react-calendar__month-view__days {
+  font-size: 14px;
+  font-weight: 600;
+  color: #535261;
+}
+
+.react-calendar__tile--now {
+  border: 1px solid #ff7506 !important;
+  border-radius: 8px;
+  background: none;
+}
+
+.react-calendar__tile--active,
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #ff7506;
+  border-radius: 8px;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background: #ff7506;
+  border-radius: 8px;
 }

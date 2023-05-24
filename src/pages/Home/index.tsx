@@ -1,4 +1,5 @@
 import LineChart from "../../components/chart/LineChart";
+import RadialBarChart from "../../components/chart/RadialBarChart";
 import {
   device,
   ordinalNumber,
@@ -9,6 +10,8 @@ import {
   service,
 } from "./Icon";
 import { Card, Col, Row, Typography } from "antd";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 const count = [
   {
@@ -46,31 +49,32 @@ const overview = [
     label: "Thiết bị",
     icon: device,
     bnb: "device",
-    number: "4.211",
-    enable: "3.799",
-    disable: "422",
+    number: 4211,
+    enable: 3799,
+    disable: 422,
   },
   {
     label: "Dịch vụ",
     icon: service,
     bnb: "service",
-    number: "276",
-    enable: "210",
-    disable: "66",
+    number: 276,
+    enable: 210,
+    disable: 66,
   },
   {
     label: "Cấp số",
     icon: ordinalNumber,
     bnb: "ordinalnumber",
-    number: "4.211",
-    used: "3.721",
-    waiting: "486",
-    skip: "32",
+    number: 4211,
+    used: 3721,
+    waiting: 486,
+    skip: 32,
   },
 ];
 
 const Home = () => {
   const { Title } = Typography;
+
   return (
     <>
       <div className="layout-content">
@@ -109,12 +113,27 @@ const Home = () => {
                 Tổng quan
               </Title>
               {overview.map((item, index) => (
-                <Card key={index} bordered={false} className="cardbox">
+                <Card
+                  key={index}
+                  bordered={false}
+                  className="cardbox"
+                  bodyStyle={{ padding: "0px 8px" }}
+                >
                   <Row align="middle">
-                    <Col xs={4}>
-                      <div>{item.icon}</div>
+                    <Col xs={6} className="radial-bar">
+                      <RadialBarChart
+                        series={
+                          item.enable && item.disable
+                            ? [item.enable ?? 0, item.disable ?? 0]
+                            : [
+                                item.used ?? 0,
+                                item.waiting ?? 0,
+                                item.skip ?? 0,
+                              ]
+                        }
+                      />
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={6}>
                       <Title level={2}>
                         <div className="number">{item.number}</div>
                         <div className={`${item.bnb} colortext number-title`}>
@@ -139,6 +158,11 @@ const Home = () => {
                   </Row>
                 </Card>
               ))}
+              <Calendar
+                calendarType="ISO 8601"
+                locale="en-EN"
+                defaultValue={new Date()}
+              />
             </Card>
           </Col>
         </Row>
