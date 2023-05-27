@@ -47,8 +47,8 @@ const NewPassword = () => {
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item>
-            <Button htmlType="submit" className="signin-button">
+          <Form.Item className="wrapper-center">
+            <Button htmlType="submit" className="submit-button">
               Xác nhận
             </Button>
           </Form.Item>

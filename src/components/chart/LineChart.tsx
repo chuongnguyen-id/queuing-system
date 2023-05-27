@@ -1,6 +1,7 @@
 import ReactApexChart from "react-apexcharts";
 import { Select, Typography } from "antd";
 import lineChart from "./configs/lineChart";
+import { CaretDownOutlined } from "@ant-design/icons";
 
 const LineChart = () => {
   const { Title, Paragraph } = Typography;
@@ -16,7 +17,9 @@ const LineChart = () => {
           Xem theo{" "}
           <Select
             defaultValue="Ngày"
+            size="large"
             // onChange={handleChange}
+            suffixIcon={<CaretDownOutlined />}
             options={[
               { value: "day", label: "Ngày" },
               { value: "week", label: "Tuần" },

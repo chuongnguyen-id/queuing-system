@@ -26,11 +26,11 @@ const SignIn = () => {
             rules={[
               {
                 required: true,
-                message: "Xin nhập tên đăng nhập",
+                message: "Vui lòng nhập tên đăng nhập",
               },
             ]}
           >
-            <Input />
+            <Input size="large" />
           </Form.Item>
           <Form.Item
             label="Mật khẩu"
@@ -38,19 +38,19 @@ const SignIn = () => {
             rules={[
               {
                 required: true,
-                message: "Xin nhập mật khẩu",
+                message: "Vui lòng nhập mật khẩu",
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password size="large" />
           </Form.Item>
           <p className="font-semibold text-muted">
             <Link to="/quen-mat-khau" className="text-red">
               Quên mật khẩu?
             </Link>
           </p>
-          <Form.Item>
-            <Button htmlType="submit" className="signin-button">
+          <Form.Item className="wrapper-center">
+            <Button htmlType="submit" className="submit-button">
               Đăng nhập
             </Button>
           </Form.Item>

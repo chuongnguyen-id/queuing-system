@@ -26,16 +26,21 @@ body {
   overflow-x: hidden;
 }
 
-.signin-button {
-  display: block;
-  margin: 0 auto;
+.wrapper-center {
+  display: flex;
+  justify-content: center;
+  align: center;
+}
+
+.submit-button {
   background: #ff9138;
   color: #ffffff;
   width: 162px;
   height: 40px;
 }
 
-.signin-cancel {
+.cancel-button {
+  background: #fff2e7;
   border-color: #ff9138;
   color: #ff9138;
   width: 162px;
@@ -86,12 +91,8 @@ body {
   padding: 75px;
 }
 
-.ant-input {
-  height: 44px;
-}
-
 .ant-input-password {
-  padding: 0px 10px;
+  height: 40px;
 }
 
 /* --------------------------------Sidenav-------------------------------- */
@@ -201,7 +202,7 @@ body {
   align-items: center;
 }
 
-.ant-row {
+.ant-layout .ant-layout-header .ant-row {
   margin-left: -12px;
   margin-right: -12px;
 }
@@ -235,6 +236,14 @@ body {
 .layout-dashboard .header-control .btn-profile div:last-child {
   color: #535261;
   font: 700 16px "Nunito";
+}
+
+.nav-breadcrumb > a {
+  color: black;
+}
+
+.nav-breadcrumb > a:last-child {
+  color: #ff7506;
 }
 
 /* -----Header dropdown----- */
@@ -297,7 +306,7 @@ body {
 }
 
 .layout-content {
-  margin: 0 28px;
+  margin: 0 28px 0 228px;
 }
 
 .layout-content .ant-row .ant-col .ant-card.cardbox {
@@ -323,13 +332,8 @@ body {
 .layout-content .ant-row .ant-col .ant-card.cardbox-title {
   padding: 12px 16px;
 }
-
-.layout-content .ant-row .ant-card .number-title {
-  display: flex;
-  align-items: center;
-}
 /* -----Bieu do cap so----- */
-.layout-content .ant-row .ant-card .number-title .icon-box {
+.layout-content .ant-row .ant-card .inline-items .icon-box {
   margin-right: 12px;
 }
 
@@ -363,6 +367,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.ant-select .ant-select-arrow {
+  color: #ff7506;
 }
 
 /* -----Tong quan----- */
@@ -423,22 +431,21 @@ body {
 
 .react-calendar {
   padding: 16px 10px;
-  font-family: "Nunito";
-  width: 100%;
-  border: none;
+  font-family: "Nunito" !important;
+  width: 100% !important;
+  border: none !important;
   box-shadow: 2px 2px 15px rgba(70, 64, 67, 0.1);
   border-radius: 12px;
 }
 
 .react-calendar__navigation {
-  padding: 0 36px;
   font-size: 16px;
   font-weight: 700;
   color: #ff7506;
 }
 
 .react-calendar__viewContainer {
-  padding: 0 36px;
+  padding: 0 40px;
 }
 
 .react-calendar .react-calendar__month-view__weekdays {
@@ -457,18 +464,130 @@ body {
 .react-calendar__tile--now {
   border: 1px solid #ff7506 !important;
   border-radius: 8px;
-  background: none;
+  background: none !important;
 }
 
 .react-calendar__tile--active,
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background: #ff7506;
+  background: #ff7506 !important;
   border-radius: 8px;
 }
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-  background: #ff7506;
+  background: #ff7506 !important;
   border-radius: 8px;
+}
+
+/* --------------------------------Device-------------------------------- */
+.layout-table {
+  margin-right: 70px;
+}
+
+.ant-table {
+  border-collapse: collapse;
+  font-family: "Nunito" !important;
+}
+
+.ant-table tr:nth-child(odd) {
+  background-color: #ffffff;
+  color: #535261;
+}
+
+.ant-table tr:nth-child(even) {
+  background-color: #fff2e7;
+  color: #535261;
+}
+
+.ant-table-thead .ant-table-cell {
+  background-color: #ff9138 !important;
+  color: #ffffff !important;
+}
+
+.ant-table-tbody .ant-table-cell {
+  padding: 6px 0px 6px 12px !important;
+}
+
+.ant-pagination .ant-pagination-item-active {
+  background-color: #ff7506;
+  border: none;
+}
+
+.ant-pagination .ant-pagination-item-active > a {
+  color: #ffffff;
+}
+
+.layout-table .ant-row .ant-col .ant-select {
+  width: 100%;
+  margin: 4px 0 16px;
+}
+
+.layout-table .ant-row .ant-col .ant-input-affix-wrapper {
+  width: 100%;
+  margin: 4px 0 16px;
+}
+
+.layout-table .ant-row .ant-col .ant-input-suffix {
+  color: #ff7506;
+}
+
+.popup-button {
+  position: absolute;
+  right: 0;
+  padding: 12px;
+  background-color: #fff2e7;
+  border: none;
+  width: 80px;
+  height: 94px;
+  box-shadow: 0px 0px 6px #e7e9f2;
+}
+
+.popup-button div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: break-spaces;
+  color: #ff7506;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* -----Add Device----- */
+
+.layout-edit {
+  margin-right: 36px;
+}
+
+.layout-edit .ant-form .ant-card {
+  margin-bottom: 24px;
+}
+
+.layout-edit .ant-form .ant-card .ant-form-item {
+  margin-bottom: 12px;
+}
+
+.layout-edit
+  .ant-form
+  .ant-card
+  .ant-form-item
+  .ant-form-item-control-input-content
+  textarea {
+  height: 128px !important;
+  resize: none;
+}
+
+.inline-items {
+  display: flex;
+  align-items: center;
+}
+
+.inline-items .ant-input {
+  width: 61px;
+  margin: 6px 12px;
+}
+
+.ant-checkbox {
+  border: 1.5px solid #4277ff;
+  border-radius: 4px;
 }

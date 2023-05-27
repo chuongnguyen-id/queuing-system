@@ -1,12 +1,14 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 
-import { Row, Col, Breadcrumb, Badge, Dropdown, List } from "antd";
+import { Row, Col, Badge, Dropdown, List } from "antd";
 
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import profile from "../../../assets/images/avatar.png";
+import useBreadcrumbs from "use-react-router-breadcrumbs";
 
 interface HeaderProps {
   name: string;
+  subName: string;
 }
 const bell = [
   <svg
@@ -72,6 +74,30 @@ const data = [
   },
 ];
 
+const routes = [
+  { path: "/dashboard", breadcrumb: "Dashboard" },
+  {
+    path: "/thiet-bi",
+    breadcrumb: "Thiết bị",
+    children: [
+      {
+        path: "danh-sach-thiet-bi",
+        breadcrumb: "Danh sách thiết bị",
+        children: [
+          {
+            path: "them-thiet-bi",
+            breadcrumb: "Thêm thiết bị",
+          },
+        ],
+      },
+    ],
+  },
+  { path: "/dich-vu", breadcrumb: "Dịch vụ > Danh sách dịch vụ" },
+  { path: "/cap-so", breadcrumb: "Cấp số > Danh sách cấp số" },
+  { path: "/bao-cao", breadcrumb: "Báo cáo > Lập báo cáo" },
+  { path: "/cai-dat", breadcrumb: "Cài đặt hệ thống > Quản lý vai trò" },
+];
+
 const menu = (
   <List
     className="header-notifications-dropdown"
@@ -89,16 +115,20 @@ const menu = (
   />
 );
 
-function Header({ name }: HeaderProps) {
+function Header({ name, subName }: HeaderProps) {
   useEffect(() => window.scrollTo(0, 0));
 
+  const breadcrumbs = useBreadcrumbs(routes, { disableDefaults: true });
   return (
     <>
       <Row>
-        <Col span={6}>
-          <Breadcrumb>
-            <Breadcrumb.Item>{name.replace("/", " > ")}</Breadcrumb.Item>
-          </Breadcrumb>
+        <Col span={6} className="nav-breadcrumb">
+          {breadcrumbs.map(({ match, breadcrumb }, index) => (
+            <Fragment key={match.pathname}>
+              <NavLink to={match.pathname}>{breadcrumb}</NavLink>
+              {index !== breadcrumbs.length - 1 && " > "}
+            </Fragment>
+          ))}
         </Col>
         <Col span={18} className="header-control">
           <Link to="/dang-nhap" className="btn-profile">

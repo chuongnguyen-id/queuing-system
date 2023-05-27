@@ -30,11 +30,11 @@ const ResetPassword = () => {
             <Input size="large" />
           </Form.Item>
           <Form.Item>
-            <Space style={{ display: "flex", justifyContent: "center" }}>
-              <Button onClick={onCancel} className="signin-cancel">
+            <Space size="large" className="wrapper-center">
+              <Button onClick={onCancel} className="cancel-button">
                 Hủy
               </Button>
-              <Button htmlType="submit" className="signin-button">
+              <Button htmlType="submit" className="submit-button">
                 Tiếp tục
               </Button>
             </Space>

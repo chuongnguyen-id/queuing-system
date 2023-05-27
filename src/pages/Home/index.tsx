@@ -87,7 +87,7 @@ const Home = () => {
               {count.map((item, index) => (
                 <Col key={index} span={6}>
                   <Card bordered={false} className="cardbox">
-                    <div className="number-title">
+                    <div className="inline-items">
                       <span className="icon-box">{item.icon}</span>
                       <span>{item.title}</span>
                     </div>
@@ -136,7 +136,7 @@ const Home = () => {
                     <Col xs={6}>
                       <Title level={2}>
                         <div className="number">{item.number}</div>
-                        <div className={`${item.bnb} colortext number-title`}>
+                        <div className={`${item.bnb} colortext inline-items`}>
                           {item.icon}&nbsp;{item.label}
                         </div>
                       </Title>
