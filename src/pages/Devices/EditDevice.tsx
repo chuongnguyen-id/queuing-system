@@ -10,8 +10,9 @@ import {
   Typography,
 } from "antd";
 import { CaretDownOutlined } from "@ant-design/icons";
+import InputTag from "./InputTag";
 
-const AddDevice = () => {
+const EditDevice = () => {
   const { Title } = Typography;
 
   const onFinish = (values: any) => {
@@ -136,6 +137,9 @@ const AddDevice = () => {
                     ]}
                   >
                     <Input size="large" placeholder="Nhập dịch vụ sử dụng" />
+                    {/* <Input.TextArea> */}
+                    <InputTag />
+                    {/* </Input.TextArea> */}
                   </Form.Item>
                 </Col>
               </Row>
@@ -160,4 +164,4 @@ const AddDevice = () => {
   );
 };
 
-export default AddDevice;
+export default EditDevice;

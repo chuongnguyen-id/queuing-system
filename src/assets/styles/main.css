@@ -535,7 +535,7 @@ body {
 .popup-button {
   position: absolute;
   right: 0;
-  padding: 12px;
+  padding: 12px 6px;
   background-color: #fff2e7;
   border: none;
   width: 80px;
@@ -554,7 +554,6 @@ body {
 }
 
 /* -----Add Device----- */
-
 .layout-edit {
   margin-right: 36px;
 }
@@ -590,4 +589,18 @@ body {
 .ant-checkbox {
   border: 1.5px solid #4277ff;
   border-radius: 4px;
+}
+
+.required-dsc {
+  margin-top: 26px;
+  color: #7e7d88;
+}
+
+.required-dsc span {
+  color: #ff4747;
+}
+
+/* -----Info Device----- */
+.fullheight-card {
+  height: calc(100vh - 190px);
 }
