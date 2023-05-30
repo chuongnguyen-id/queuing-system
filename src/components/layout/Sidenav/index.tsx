@@ -11,11 +11,7 @@ import {
   logout,
 } from "./Icon";
 
-interface SidenavProps {
-  setPath: any;
-}
-
-function Sidenav(props: SidenavProps) {
+function Sidenav() {
   const location = useLocation();
   const currentPath = location.pathname;
   const currentKey =
@@ -26,11 +22,7 @@ function Sidenav(props: SidenavProps) {
       { path: "/cap-so", key: "4" },
       { path: "/bao-cao", key: "5" },
       { path: "/cai-dat", key: "6" },
-    ].find((item) => item.path === currentPath)?.key ?? "1";
-
-  const handleOnClick = (path: string, subPath: string) => {
-    props.setPath(path, subPath);
-  };
+    ].find((item) => currentPath.startsWith(item.path))?.key ?? "";
 
   return (
     <>
@@ -44,50 +36,40 @@ function Sidenav(props: SidenavProps) {
             to: "/dashboard",
             icon: dashboard,
             label: "Dashboard",
-            breadcrumbName: "",
           },
           {
             key: "2",
             to: "/thiet-bi/danh-sach-thiet-bi",
             icon: devices,
             label: "Thiết bị",
-            breadcrumbName: "Danh sách thiết bị",
           },
           {
             key: "3",
             to: "/dich-vu",
             icon: services,
             label: "Dịch vụ",
-            breadcrumbName: "Danh sách dịch vụ",
           },
           {
             key: "4",
             to: "/cap-so",
             icon: ordinalNumbers,
             label: "Cấp số",
-            breadcrumbName: "Danh sách Cấp số",
           },
           {
             key: "5",
             to: "/bao-cao",
             icon: report,
             label: "Báo cáo",
-            breadcrumbName: "Lập báo cáo",
           },
           {
             key: "6",
             to: "/cai-dat",
             icon: setting,
             label: "Cài đặt hệ thống",
-            breadcrumbName: "Quản lý vai trò",
           },
         ].map((item) => (
           <Menu.Item key={item.key}>
-            <NavLink
-              key={item.key}
-              to={item.to}
-              onClick={() => handleOnClick(item.label, item.breadcrumbName)}
-            >
+            <NavLink key={item.key} to={item.to}>
               <span className="icon">{item.icon}</span>
               <span className="label">{item.label}</span>
             </NavLink>

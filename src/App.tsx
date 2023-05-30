@@ -10,11 +10,13 @@ import Devices from "./pages/Devices";
 import AddDevice from "./pages/Devices/AddDevice";
 import DeviceInfo from "./pages/Devices/DeviceInfo";
 import EditDevice from "./pages/Devices/EditDevice";
-import Service from "./pages/Service";
+import Service from "./pages/Services";
+import AddService from "./pages/Services/AddService";
+import ServiceInfo from "./pages/Services/ServiceInfo";
+import EditService from "./pages/Services/EditService";
 import OrdinalNumber from "./pages/OrdinalNumber";
-import Report from "./pages/Report";
+import Report from "./pages/Reports";
 import Setting from "./pages/Setting";
-import AddService from "./pages/Service/AddService";
 
 function App() {
   return (
@@ -37,7 +39,7 @@ function App() {
             element={<DeviceInfo />}
           />
           <Route
-            path="/thiet-bi/danh-sach-thiet-bi/cap-nhat-thiet-bi"
+            path="/thiet-bi/danh-sach-thiet-bi/chi-tiet-thiet-bi/cap-nhat-thiet-bi"
             element={<EditDevice />}
           />
 
@@ -47,6 +49,15 @@ function App() {
             path="/dich-vu/danh-sach-dich-vu/them-dich-vu"
             element={<AddService />}
           />
+          <Route
+            path="/dich-vu/danh-sach-dich-vu/chi-tiet-dich-vu"
+            element={<ServiceInfo />}
+          />
+          <Route
+            path="/dich-vu/danh-sach-dich-vu/chi-tiet-dich-vu/cap-nhat-dich-vu"
+            element={<EditService />}
+          />
+
           <Route path="cap-so" element={<OrdinalNumber />} />
           <Route path="bao-cao" element={<Report />} />
           <Route path="cai-dat" element={<Setting />} />

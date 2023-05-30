@@ -340,7 +340,7 @@ body {
 .layout-content .ant-row .ant-card .number {
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   color: #535261;
   margin-bottom: 0;
 }
@@ -480,7 +480,7 @@ body {
   border-radius: 8px;
 }
 
-/* --------------------------------Device-------------------------------- */
+/* --------------------------------Devices/Services Table-------------------------------- */
 .layout-table {
   margin-right: 70px;
 }
@@ -503,10 +503,6 @@ body {
 .ant-table-thead .ant-table-cell {
   background-color: #ff9138 !important;
   color: #ffffff !important;
-}
-
-.ant-table-tbody .ant-table-cell {
-  padding: 6px 0px 6px 12px !important;
 }
 
 .ant-pagination .ant-pagination-item-active {
@@ -532,6 +528,14 @@ body {
   color: #ff7506;
 }
 
+.layout-table .ant-row .ant-col .ant-picker-range {
+  margin-top: 4px;
+}
+
+.layout-table .ant-row .ant-col .ant-picker-suffix {
+  color: #ff7506;
+}
+
 .popup-button {
   position: absolute;
   right: 0;
@@ -553,7 +557,7 @@ body {
   font-weight: 600;
 }
 
-/* -----Add Device----- */
+/* -----Add/Edit Devices/Services----- */
 .layout-edit {
   margin-right: 36px;
 }
@@ -598,6 +602,23 @@ body {
 
 .required-dsc span {
   color: #ff4747;
+}
+
+.ant-select-multiple.ant-select-lg .ant-select-selection-item,
+.ant-select-multiple.ant-select-lg .ant-select-selection-item-remove {
+  background-color: #ffac6a;
+  color: #ffffff;
+  border-radius: 9px;
+}
+
+.ant-select-dropdown .ant-select-item-option-selected {
+  background-color: #fff2e7 !important;
+}
+
+.ant-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled)
+  .ant-select-item-option-state {
+  color: #ff9138;
 }
 
 /* -----Info Device----- */

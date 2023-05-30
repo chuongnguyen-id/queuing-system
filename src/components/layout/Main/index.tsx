@@ -1,20 +1,11 @@
 import { Layout } from "antd";
 import Sidenav from "../Sidenav";
 import Header from "../Header";
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 const { Header: AntHeader, Content, Sider } = Layout;
 
 function Main({ children }: any) {
-  const [currentPath, setCurrentPath] = useState("Dashboard");
-  const [subPath, setSubPath] = useState("");
-
-  const handleSetPath = (path: string, subPath: string) => {
-    setCurrentPath(path);
-    setSubPath(subPath);
-  };
-
   return (
     <>
       <Layout className="layout-dashboard">
@@ -23,11 +14,11 @@ function Main({ children }: any) {
           width={200}
           className="sider-primary ant-layout-sider-primary"
         >
-          <Sidenav setPath={handleSetPath} />
+          <Sidenav />
         </Sider>
         <Layout>
           <AntHeader>
-            <Header name={currentPath} subName={subPath} />
+            <Header />
           </AntHeader>
           <Content className="content-ant">{children}</Content>
         </Layout>

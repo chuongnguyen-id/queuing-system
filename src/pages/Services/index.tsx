@@ -14,77 +14,62 @@ import { Link } from "react-router-dom";
 import { add, calendar } from "../../components/icon/icon";
 import { useState } from "react";
 import _ from "lodash";
-import moment from "moment";
 
 interface DataType {
   key: string;
-  stt: string;
+  code: string;
   name: string;
-  service: string;
-  issueDate: Date;
-  expirationDate: Date;
-  status: string;
-  source: string;
+  description: string;
+  activeStatus: boolean;
 }
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "STT",
-    dataIndex: "stt",
-    key: "stt",
+    title: "Mã thiết bị",
+    dataIndex: "code",
+    key: "code",
   },
   {
-    title: "Tên khách hàng",
+    title: "Tên thiết bị",
     dataIndex: "name",
     key: "name",
   },
   {
-    title: "tên dịch vụ",
-    dataIndex: "service",
-    key: "service",
+    title: "Mô tả",
+    dataIndex: "description",
+    key: "description",
   },
   {
-    title: "Thời gian cấp",
-    dataIndex: "issueDate",
-    key: "issueDate",
-    render: (date) => moment(date).format("HH:mm - YYYY/MM/DD"),
-  },
-  {
-    title: "Hạn sử dụng",
-    dataIndex: "expirationDate",
-    key: "expirationDate",
-    render: (date) => moment(date).format("HH:mm - YYYY/MM/DD"),
-  },
-  {
-    title: "Trạng thái",
-    dataIndex: "status",
-    key: "status",
-    render: (status) => {
-      const color =
-        status === "Đang chờ"
-          ? "#4277FF"
-          : status === "Đã sử dụng"
-          ? "#7E7D88"
-          : "#E73F3F";
+    title: "Trạng thái hoạt động",
+    dataIndex: "activeStatus",
+    key: "activeStatus",
+    render: (activeStatus) => {
+      const color = activeStatus ? "#34CD26" : "#EC3740";
+      const text = activeStatus ? "Hoạt động" : "Ngưng hoạt động";
       return (
         <div>
           <span style={{ color: color }}>●&nbsp;</span>
-          {status}
+          {text}
         </div>
       );
     },
-  },
-  {
-    title: "Nguồn cấp",
-    dataIndex: "source",
-    key: "source",
   },
   {
     title: " ",
     key: "detail",
     align: "center",
     render: () => (
-      <a href={"/cap-so/danh-sach-cap-so/chi-tiet-cap-so"}>Chi tiết</a>
+      <a href={"/dich-vu/danh-sach-dich-vu/chi-tiet-dich-vu"}>Chi tiết</a>
+    ),
+  },
+  {
+    title: " ",
+    key: "update",
+    align: "center",
+    render: () => (
+      <a href={"/dich-vu/danh-sach-dich-vu/chi-tiet-dich-vu/cap-nhat-dich-vu"}>
+        Cập nhật
+      </a>
     ),
   },
 ];
@@ -92,34 +77,60 @@ const columns: ColumnsType<DataType> = [
 const data: DataType[] = [
   {
     key: "1",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    service: "Khám tim mạch",
-    issueDate: new Date("2023/05/07 15:56"),
-    expirationDate: new Date("2023/05/07 15:56"),
-    status: "Đang chờ",
-    source: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
+    description: "Mô tả dịch vụ",
+    activeStatus: false,
+  },
+  {
+    key: "2",
+    code: "KIO_01",
+    name: "kiosk",
+    description: "Mô tả dịch vụ",
+    activeStatus: false,
+  },
+  {
+    key: "3",
+    code: "KIO_01",
+    name: "kiosk",
+    description: "Mô tả dịch vụ",
+    activeStatus: true,
+  },
+  {
+    key: "4",
+    code: "KIO_01",
+    name: "kiosk",
+    description: "Mô tả dịch vụ",
+    activeStatus: true,
+  },
+  {
+    key: "5",
+    code: "KIO_01",
+    name: "kiosk",
+    description: "Mô tả dịch vụ",
+    activeStatus: false,
+  },
+  {
+    key: "6",
+    code: "KIO_01",
+    name: "kiosk",
+    description: "Mô tả dịch vụ",
+    activeStatus: false,
   },
 ];
 
-const OrdinalNumber = () => {
+const Services = () => {
   const { Title } = Typography;
   const { RangePicker } = DatePicker;
   const [filteredData, setFilteredData] = useState(data);
 
-  const handleStatus = (value: string) => {
+  const handleActiveStatus = (value: string) => {
     let filteredData: DataType[] = [];
     if (value === "all") {
       filteredData = data;
     } else {
       filteredData = data.filter(
-        (item) =>
-          item.status ===
-          (value === "waiting"
-            ? "Đang chờ"
-            : value === "used"
-            ? "Đã sử dụng"
-            : "Bỏ qua")
+        (item) => item.activeStatus === (value === "enable" ? true : false)
       );
     }
     setFilteredData(filteredData);
@@ -128,7 +139,7 @@ const OrdinalNumber = () => {
   const handleSearch = (searchText: string) => {
     const newData = _.filter(data, (item) => {
       return _.includes(
-        (item.stt + item.name + item.service + item.source).toLowerCase(),
+        (item.code + item.name + item.description).toLowerCase(),
         searchText.toLowerCase()
       );
     });
@@ -145,17 +156,16 @@ const OrdinalNumber = () => {
           </Title>
           <Row gutter={24}>
             <Col span={6}>
-              <div>Tình trạng</div>
+              <div>Trạng thái hoạt động</div>
               <Select
                 defaultValue="Tất cả"
                 size="large"
-                onChange={handleStatus}
+                onChange={handleActiveStatus}
                 suffixIcon={<CaretDownOutlined />}
                 options={[
                   { value: "all", label: "Tất cả" },
-                  { value: "waiting", label: "Đang chờ" },
-                  { value: "used", label: "Đã sử dụng" },
-                  { value: "skip", label: "Bỏ qua" },
+                  { value: "enable", label: "Hoạt động" },
+                  { value: "disable", label: "Ngưng hoạt động" },
                 ]}
               />
             </Col>
@@ -187,4 +197,4 @@ const OrdinalNumber = () => {
   );
 };
 
-export default OrdinalNumber;
+export default Services;

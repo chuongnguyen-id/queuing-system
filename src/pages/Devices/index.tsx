@@ -3,11 +3,13 @@ import type { ColumnsType } from "antd/es/table";
 import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { add } from "../../components/icon/icon";
+import { useState } from "react";
+import _ from "lodash";
 
 interface DataType {
   key: string;
-  deviceCode: string;
-  deviceName: string;
+  code: string;
+  name: string;
   ipAddress: string;
   activeStatus: boolean;
   connectionStatus: boolean;
@@ -17,13 +19,13 @@ interface DataType {
 const columns: ColumnsType<DataType> = [
   {
     title: "Mã thiết bị",
-    dataIndex: "deviceCode",
-    key: "deviceCode",
+    dataIndex: "code",
+    key: "code",
   },
   {
     title: "Tên thiết bị",
-    dataIndex: "deviceName",
-    key: "deviceName",
+    dataIndex: "name",
+    key: "name",
   },
   {
     title: "Địa chỉ IP",
@@ -82,6 +84,7 @@ const columns: ColumnsType<DataType> = [
   {
     title: " ",
     key: "detail",
+    align: "center",
     render: () => (
       <a href={"/thiet-bi/danh-sach-thiet-bi/chi-tiet-thiet-bi"}>Chi tiết</a>
     ),
@@ -89,8 +92,15 @@ const columns: ColumnsType<DataType> = [
   {
     title: " ",
     key: "update",
+    align: "center",
     render: () => (
-      <a href={"/thiet-bi/danh-sach-thiet-bi/cap-nhat-thiet-bi"}>Cập nhật</a>
+      <a
+        href={
+          "/thiet-bi/danh-sach-thiet-bi/chi-tiet-thiet-bi/cap-nhat-thiet-bi"
+        }
+      >
+        Cập nhật
+      </a>
     ),
   },
 ];
@@ -98,8 +108,8 @@ const columns: ColumnsType<DataType> = [
 const data: DataType[] = [
   {
     key: "1",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: false,
     connectionStatus: true,
@@ -108,8 +118,8 @@ const data: DataType[] = [
   },
   {
     key: "2",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: true,
     connectionStatus: false,
@@ -118,8 +128,8 @@ const data: DataType[] = [
   },
   {
     key: "3",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: true,
     connectionStatus: true,
@@ -128,8 +138,8 @@ const data: DataType[] = [
   },
   {
     key: "4",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: false,
     connectionStatus: true,
@@ -138,8 +148,8 @@ const data: DataType[] = [
   },
   {
     key: "5",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: false,
     connectionStatus: true,
@@ -148,8 +158,8 @@ const data: DataType[] = [
   },
   {
     key: "6",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: true,
     connectionStatus: false,
@@ -158,8 +168,8 @@ const data: DataType[] = [
   },
   {
     key: "7",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: true,
     connectionStatus: true,
@@ -168,8 +178,8 @@ const data: DataType[] = [
   },
   {
     key: "8",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: false,
     connectionStatus: true,
@@ -178,8 +188,8 @@ const data: DataType[] = [
   },
   {
     key: "9",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: false,
     connectionStatus: true,
@@ -188,8 +198,8 @@ const data: DataType[] = [
   },
   {
     key: "10",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: true,
     connectionStatus: false,
@@ -198,8 +208,8 @@ const data: DataType[] = [
   },
   {
     key: "11",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: true,
     connectionStatus: true,
@@ -208,8 +218,8 @@ const data: DataType[] = [
   },
   {
     key: "12",
-    deviceCode: "KIO_01",
-    deviceName: "kiosk",
+    code: "KIO_01",
+    name: "kiosk",
     ipAddress: "192.168.1.10",
     activeStatus: false,
     connectionStatus: true,
@@ -220,6 +230,47 @@ const data: DataType[] = [
 
 const Devices = () => {
   const { Title } = Typography;
+  const [filteredData, setFilteredData] = useState(data);
+
+  const handleActiveStatus = (value: string) => {
+    let filteredData: DataType[] = [];
+    if (value === "all") {
+      filteredData = data;
+    } else {
+      filteredData = data.filter(
+        (item) => item.activeStatus === (value === "enable" ? true : false)
+      );
+    }
+    setFilteredData(filteredData);
+  };
+
+  const handleConnectionStatus = (value: string) => {
+    let filteredData: DataType[] = [];
+    if (value === "all") {
+      filteredData = data;
+    } else {
+      filteredData = data.filter(
+        (item) => item.connectionStatus === (value === "connect" ? true : false)
+      );
+    }
+    setFilteredData(filteredData);
+  };
+
+  const handleSearch = (searchText: string) => {
+    const newData = _.filter(data, (item) => {
+      return _.includes(
+        (
+          item.code +
+          item.name +
+          item.ipAddress +
+          item.serviceUsed
+        ).toLowerCase(),
+        searchText.toLowerCase()
+      );
+    });
+
+    setFilteredData(newData);
+  };
 
   return (
     <>
@@ -234,7 +285,7 @@ const Devices = () => {
               <Select
                 defaultValue="Tất cả"
                 size="large"
-                // onChange={handleChange}
+                onChange={handleActiveStatus}
                 suffixIcon={<CaretDownOutlined />}
                 options={[
                   { value: "all", label: "Tất cả" },
@@ -248,7 +299,7 @@ const Devices = () => {
               <Select
                 defaultValue="Tất cả"
                 size="large"
-                // onChange={handleChange}
+                onChange={handleConnectionStatus}
                 suffixIcon={<CaretDownOutlined />}
                 options={[
                   { value: "all", label: "Tất cả" },
@@ -262,6 +313,7 @@ const Devices = () => {
               <Input
                 suffix={<SearchOutlined />}
                 size="large"
+                onChange={(e) => handleSearch(e.target.value)}
                 placeholder="Nhập từ khóa"
                 allowClear
               />
@@ -273,7 +325,7 @@ const Devices = () => {
               <div>Thêm thiết bị</div>
             </Link>
           </Button>
-          <Table columns={columns} dataSource={data} bordered />
+          <Table columns={columns} dataSource={filteredData} bordered />
         </div>
       </div>
     </>

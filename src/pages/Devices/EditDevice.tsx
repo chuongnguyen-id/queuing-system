@@ -10,10 +10,12 @@ import {
   Typography,
 } from "antd";
 import { CaretDownOutlined } from "@ant-design/icons";
-import InputTag from "./InputTag";
+import { options } from "./configs";
+import { useNavigate } from "react-router-dom";
 
 const EditDevice = () => {
   const { Title } = Typography;
+  const navigate = useNavigate();
 
   const onFinish = (values: any) => {
     console.log(values);
@@ -23,6 +25,15 @@ const EditDevice = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+
+  const handleChange = (value: string[]) => {
+    console.log(`selected ${value}`);
+  };
+
+  const onCancel = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       <div className="layout-content">
@@ -136,10 +147,14 @@ const EditDevice = () => {
                       },
                     ]}
                   >
-                    <Input size="large" placeholder="Nhập dịch vụ sử dụng" />
-                    {/* <Input.TextArea> */}
-                    <InputTag />
-                    {/* </Input.TextArea> */}
+                    <Select
+                      mode="multiple"
+                      size="large"
+                      placeholder="Nhập dịch vụ sử dụng"
+                      suffixIcon={<CaretDownOutlined />}
+                      onChange={handleChange}
+                      options={options}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -149,11 +164,11 @@ const EditDevice = () => {
             </Card>
             <Form.Item>
               <Space size="large" className="wrapper-center">
-                <Button htmlType="submit" className="cancel-button">
-                  Hủy dịch vụ
+                <Button onClick={onCancel} className="cancel-button">
+                  Hủy bỏ
                 </Button>
                 <Button htmlType="submit" className="submit-button">
-                  Thêm dịch vụ
+                  Cập nhật
                 </Button>
               </Space>
             </Form.Item>

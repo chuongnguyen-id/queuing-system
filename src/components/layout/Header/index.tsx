@@ -6,10 +6,6 @@ import { Link, NavLink } from "react-router-dom";
 import profile from "../../../assets/images/avatar.png";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 
-interface HeaderProps {
-  name: string;
-  subName: string;
-}
 const bell = [
   <svg
     width="32"
@@ -88,12 +84,66 @@ const routes = [
             path: "them-thiet-bi",
             breadcrumb: "Thêm thiết bị",
           },
+          {
+            path: "chi-tiet-thiet-bi",
+            breadcrumb: "Chi tiết thiết bị",
+          },
+          {
+            path: "chi-tiet-thiet-bi/cap-nhat-thiet-bi",
+            breadcrumb: "Cập nhật thiết bị",
+          },
         ],
       },
     ],
   },
-  { path: "/dich-vu", breadcrumb: "Dịch vụ > Danh sách dịch vụ" },
-  { path: "/cap-so", breadcrumb: "Cấp số > Danh sách cấp số" },
+  {
+    path: "/dich-vu",
+    breadcrumb: "Dịch vụ",
+    children: [
+      {
+        path: "danh-sach-dich-vu",
+        breadcrumb: "Danh sách dịch vụ",
+        children: [
+          {
+            path: "them-dich-vu",
+            breadcrumb: "Thêm dịch vụ",
+          },
+          {
+            path: "chi-tiet-dich-vu",
+            breadcrumb: "Chi tiết dịch vụ",
+          },
+          {
+            path: "chi-tiet-dich-vu/cap-nhat-dich-vu",
+            breadcrumb: "Cập nhật dịch vụ",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "/cap-so",
+    breadcrumb: "Cấp số",
+    children: [
+      {
+        path: "danh-sach-cap-so",
+        breadcrumb: "Danh sách dịch vụ",
+        // children: [
+        //   {
+        //     path: "them-dich-vu",
+        //     breadcrumb: "Thêm dịch vụ",
+        //   },
+        //   {
+        //     path: "chi-tiet-dich-vu",
+        //     breadcrumb: "Chi tiết dịch vụ",
+        //   },
+        //   {
+        //     path: "chi-tiet-dich-vu/cap-nhat-dich-vu",
+        //     breadcrumb: "Cập nhật dịch vụ",
+        //   },
+        // ],
+      },
+    ],
+  },
   { path: "/bao-cao", breadcrumb: "Báo cáo > Lập báo cáo" },
   { path: "/cai-dat", breadcrumb: "Cài đặt hệ thống > Quản lý vai trò" },
 ];
@@ -115,7 +165,7 @@ const menu = (
   />
 );
 
-function Header({ name, subName }: HeaderProps) {
+function Header() {
   useEffect(() => window.scrollTo(0, 0));
 
   const breadcrumbs = useBreadcrumbs(routes, { disableDefaults: true });

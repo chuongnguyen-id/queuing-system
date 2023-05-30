@@ -9,8 +9,9 @@ const ResetPassword = () => {
     navigate("/doi-mat-khau");
   };
 
-  const onCancel = () => {
-    navigate("/dang-nhap");
+  const onCancel = (event: any) => {
+    event.preventDefault();
+    navigate(-1);
   };
 
   return (

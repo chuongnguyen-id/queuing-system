@@ -9,9 +9,11 @@ import {
   Space,
   Typography,
 } from "antd";
+import { useNavigate } from "react-router-dom";
 
-const AddService = () => {
+const EditService = () => {
   const { Title } = Typography;
+  const navigate = useNavigate();
 
   const onFinish = (values: any) => {
     console.log("Success:", values);
@@ -20,6 +22,12 @@ const AddService = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+
+  const onCancel = (event: any) => {
+    event.preventDefault();
+    navigate(-1);
+  };
+
   return (
     <>
       <div className="layout-content">
@@ -40,7 +48,7 @@ const AddService = () => {
                 <Col span={12}>
                   <Form.Item
                     label="Mã dịch vụ:"
-                    name="serviceCode"
+                    name="code"
                     rules={[
                       {
                         required: true,
@@ -52,7 +60,7 @@ const AddService = () => {
                   </Form.Item>
                   <Form.Item
                     label="Tên dịch vụ:"
-                    name="serviceName"
+                    name="name"
                     rules={[
                       {
                         required: true,
@@ -73,7 +81,6 @@ const AddService = () => {
               <Title level={3} className="text-orange">
                 Quy tắc cấp số
               </Title>
-
               <Row className="inline-items">
                 <Col span={4}>
                   <Checkbox>Tăng tự động từ:</Checkbox>
@@ -112,11 +119,11 @@ const AddService = () => {
             </Card>
             <Form.Item>
               <Space size="large" className="wrapper-center">
-                <Button htmlType="submit" className="cancel-button">
-                  Hủy dịch vụ
+                <Button onClick={onCancel} className="cancel-button">
+                  Hủy bỏ
                 </Button>
                 <Button htmlType="submit" className="submit-button">
-                  Thêm dịch vụ
+                  Cập nhật
                 </Button>
               </Space>
             </Form.Item>
@@ -127,4 +134,4 @@ const AddService = () => {
   );
 };
 
-export default AddService;
+export default EditService;
