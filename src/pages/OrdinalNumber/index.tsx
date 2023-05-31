@@ -12,7 +12,7 @@ import type { ColumnsType } from "antd/es/table";
 import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { add, calendar } from "../../components/icon/icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import _ from "lodash";
 import moment from "moment";
 
@@ -95,8 +95,28 @@ const data: DataType[] = [
     stt: "2010001",
     name: "Lê Huỳnh Ái Vân",
     service: "Khám tim mạch",
-    issueDate: new Date("2023/05/07 15:56"),
-    expirationDate: new Date("2023/05/07 15:56"),
+    issueDate: new Date("2023/05/01 15:56"),
+    expirationDate: new Date("2023/05/05 15:56"),
+    status: "Đang chờ",
+    source: "kiosk",
+  },
+  {
+    key: "2",
+    stt: "2010001",
+    name: "Lê Huỳnh Ái Vân",
+    service: "Khám tim mạch",
+    issueDate: new Date("2023/05/06 15:56"),
+    expirationDate: new Date("2023/05/10 15:56"),
+    status: "Đang chờ",
+    source: "kiosk",
+  },
+  {
+    key: "3",
+    stt: "2010001",
+    name: "Lê Huỳnh Ái Vân",
+    service: "Khám tim mạch",
+    issueDate: new Date("2023/05/10 15:56"),
+    expirationDate: new Date("2023/05/15 15:56"),
     status: "Đang chờ",
     source: "kiosk",
   },
@@ -105,7 +125,9 @@ const data: DataType[] = [
 const OrdinalNumber = () => {
   const { Title } = Typography;
   const { RangePicker } = DatePicker;
+
   const [filteredData, setFilteredData] = useState(data);
+  const [selectedDateRange, setSelectedDateRange] = useState(undefined);
 
   const handleStatus = (value: string) => {
     let filteredData: DataType[] = [];
@@ -136,6 +158,20 @@ const OrdinalNumber = () => {
     setFilteredData(newData);
   };
 
+  const handleRangeChange = (dates: any, dateStrings: [string, string]) => {
+    setSelectedDateRange(dates);
+    const filtered = data.filter((item) =>
+      moment(item.issueDate).isBetween(dateStrings[0], dateStrings[1])
+    );
+    setFilteredData(filtered);
+  };
+
+  useEffect(() => {
+    if (!selectedDateRange) {
+      setFilteredData(data);
+    }
+  }, [selectedDateRange]);
+
   return (
     <>
       <div className="layout-content">
@@ -161,7 +197,11 @@ const OrdinalNumber = () => {
             </Col>
             <Col span={6}>
               <div>Chọn thời gian</div>
-              <RangePicker size="large" suffixIcon={calendar} />
+              <RangePicker
+                size="large"
+                suffixIcon={calendar}
+                onChange={handleRangeChange}
+              />
             </Col>
             <Col span={6} offset={6}>
               <div>Từ khóa</div>
