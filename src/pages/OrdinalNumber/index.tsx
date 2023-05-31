@@ -160,8 +160,10 @@ const OrdinalNumber = () => {
 
   const handleRangeChange = (dates: any, dateStrings: [string, string]) => {
     setSelectedDateRange(dates);
-    const filtered = data.filter((item) =>
-      moment(item.issueDate).isBetween(dateStrings[0], dateStrings[1])
+    const filtered = data.filter(
+      (item) =>
+        moment(item.issueDate).isBetween(dateStrings[0], dateStrings[1]) &&
+        moment(item.expirationDate).isBetween(dateStrings[0], dateStrings[1])
     );
     setFilteredData(filtered);
   };
