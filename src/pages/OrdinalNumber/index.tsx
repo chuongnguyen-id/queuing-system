@@ -9,6 +9,11 @@ import {
   DatePicker,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import {
+  processingStatusSelect,
+  serviceSelect,
+  sourceSelect,
+} from "../../components/configs/SelectConfigs";
 import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { add, calendar } from "../../components/icon/icon";
@@ -39,7 +44,7 @@ const columns: ColumnsType<DataType> = [
     key: "name",
   },
   {
-    title: "tên dịch vụ",
+    title: "Tên dịch vụ",
     dataIndex: "service",
     key: "service",
   },
@@ -83,9 +88,7 @@ const columns: ColumnsType<DataType> = [
     title: " ",
     key: "detail",
     align: "center",
-    render: () => (
-      <a href={"/cap-so/danh-sach-cap-so/chi-tiet-cap-so"}>Chi tiết</a>
-    ),
+    render: () => <a href={"/cap-so/danh-sach-cap-so/chi-tiet"}>Chi tiết</a>,
   },
 ];
 
@@ -98,17 +101,17 @@ const data: DataType[] = [
     issueDate: new Date("2023/05/01 15:56"),
     expirationDate: new Date("2023/05/05 15:56"),
     status: "Đang chờ",
-    source: "kiosk",
+    source: "Kiosk",
   },
   {
     key: "2",
     stt: "2010001",
     name: "Lê Huỳnh Ái Vân",
-    service: "Khám tim mạch",
+    service: "Khám tổng quát",
     issueDate: new Date("2023/05/06 15:56"),
     expirationDate: new Date("2023/05/10 15:56"),
     status: "Đang chờ",
-    source: "kiosk",
+    source: "Kiosk",
   },
   {
     key: "3",
@@ -118,7 +121,7 @@ const data: DataType[] = [
     issueDate: new Date("2023/05/10 15:56"),
     expirationDate: new Date("2023/05/15 15:56"),
     status: "Đang chờ",
-    source: "kiosk",
+    source: "Kiosk",
   },
 ];
 
@@ -129,20 +132,32 @@ const OrdinalNumber = () => {
   const [filteredData, setFilteredData] = useState(data);
   const [selectedDateRange, setSelectedDateRange] = useState(undefined);
 
-  const handleStatus = (value: string) => {
+  const handleService = (value: string) => {
     let filteredData: DataType[] = [];
-    if (value === "all") {
+    if (value === "Tất cả") {
       filteredData = data;
     } else {
-      filteredData = data.filter(
-        (item) =>
-          item.status ===
-          (value === "waiting"
-            ? "Đang chờ"
-            : value === "used"
-            ? "Đã sử dụng"
-            : "Bỏ qua")
-      );
+      filteredData = data.filter((item) => item.service === value);
+    }
+    setFilteredData(filteredData);
+  };
+
+  const handleStatus = (value: string) => {
+    let filteredData: DataType[] = [];
+    if (value === "Tất cả") {
+      filteredData = data;
+    } else {
+      filteredData = data.filter((item) => item.status === value);
+    }
+    setFilteredData(filteredData);
+  };
+
+  const handleSource = (value: string) => {
+    let filteredData: DataType[] = [];
+    if (value === "Tất cả") {
+      filteredData = data;
+    } else {
+      filteredData = data.filter((item) => item.source === value);
     }
     setFilteredData(filteredData);
   };
@@ -182,19 +197,34 @@ const OrdinalNumber = () => {
             Quản lý dịch vụ
           </Title>
           <Row gutter={24}>
-            <Col span={6}>
+            <Col span={4}>
+              <div>Tên dịch vụ</div>
+              <Select
+                defaultValue="Tất cả"
+                size="large"
+                onChange={handleService}
+                suffixIcon={<CaretDownOutlined />}
+                options={serviceSelect}
+              />
+            </Col>
+            <Col span={4}>
               <div>Tình trạng</div>
               <Select
                 defaultValue="Tất cả"
                 size="large"
                 onChange={handleStatus}
                 suffixIcon={<CaretDownOutlined />}
-                options={[
-                  { value: "all", label: "Tất cả" },
-                  { value: "waiting", label: "Đang chờ" },
-                  { value: "used", label: "Đã sử dụng" },
-                  { value: "skip", label: "Bỏ qua" },
-                ]}
+                options={processingStatusSelect}
+              />
+            </Col>
+            <Col span={4}>
+              <div>Nguồn cấp</div>
+              <Select
+                defaultValue="Tất cả"
+                size="large"
+                onChange={handleSource}
+                suffixIcon={<CaretDownOutlined />}
+                options={sourceSelect}
               />
             </Col>
             <Col span={6}>
@@ -205,7 +235,7 @@ const OrdinalNumber = () => {
                 onChange={handleRangeChange}
               />
             </Col>
-            <Col span={6} offset={6}>
+            <Col span={6}>
               <div>Từ khóa</div>
               <Input
                 suffix={<SearchOutlined />}
@@ -217,9 +247,9 @@ const OrdinalNumber = () => {
             </Col>
           </Row>
           <Button className="popup-button">
-            <Link to="/dich-vu/danh-sach-dich-vu/them-dich-vu">
+            <Link to="/cap-so/danh-sach-cap-so/cap-so-moi">
               <div>{add}</div>
-              <div>Thêm dịch vụ</div>
+              <div>Cấp số mới</div>
             </Link>
           </Button>
           <Table columns={columns} dataSource={filteredData} bordered />

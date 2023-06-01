@@ -45,13 +45,13 @@ function Sidenav() {
           },
           {
             key: "3",
-            to: "/dich-vu",
+            to: "/dich-vu/danh-sach-dich-vu",
             icon: services,
             label: "Dịch vụ",
           },
           {
             key: "4",
-            to: "/cap-so",
+            to: "/cap-so/danh-sach-cap-so",
             icon: ordinalNumbers,
             label: "Cấp số",
           },

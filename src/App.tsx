@@ -17,6 +17,7 @@ import EditService from "./pages/Services/EditService";
 import OrdinalNumber from "./pages/OrdinalNumber";
 import Report from "./pages/Reports";
 import Setting from "./pages/Setting";
+import AddOrdinalNumber from "./pages/OrdinalNumber/AddOrdinalNumber";
 
 function App() {
   return (
@@ -31,34 +32,48 @@ function App() {
           {/* Device */}
           <Route path="thiet-bi/danh-sach-thiet-bi" element={<Devices />} />
           <Route
-            path="/thiet-bi/danh-sach-thiet-bi/them-thiet-bi"
+            path="thiet-bi/danh-sach-thiet-bi/them-thiet-bi"
             element={<AddDevice />}
           />
           <Route
-            path="/thiet-bi/danh-sach-thiet-bi/chi-tiet-thiet-bi"
+            path="thiet-bi/danh-sach-thiet-bi/chi-tiet"
             element={<DeviceInfo />}
           />
           <Route
-            path="/thiet-bi/danh-sach-thiet-bi/chi-tiet-thiet-bi/cap-nhat-thiet-bi"
+            path="thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat"
             element={<EditDevice />}
           />
 
           {/* Service */}
-          <Route path="dich-vu" element={<Service />} />
+          <Route path="dich-vu/danh-sach-dich-vu" element={<Service />} />
           <Route
-            path="/dich-vu/danh-sach-dich-vu/them-dich-vu"
+            path="dich-vu/danh-sach-dich-vu/them-dich-vu"
             element={<AddService />}
           />
           <Route
-            path="/dich-vu/danh-sach-dich-vu/chi-tiet-dich-vu"
+            path="dich-vu/danh-sach-dich-vu/chi-tiet"
             element={<ServiceInfo />}
           />
           <Route
-            path="/dich-vu/danh-sach-dich-vu/chi-tiet-dich-vu/cap-nhat-dich-vu"
+            path="dich-vu/danh-sach-dich-vu/chi-tiet/cap-nhat"
             element={<EditService />}
           />
 
-          <Route path="cap-so" element={<OrdinalNumber />} />
+          {/* Ordinal Number */}
+          <Route path="cap-so/danh-sach-cap-so" element={<OrdinalNumber />} />
+          <Route
+            path="cap-so/danh-sach-cap-so/cap-so-moi"
+            element={<AddOrdinalNumber />}
+          />
+          {/* <Route
+            path="cap-so/danh-sach-cap-so/chi-tiet"
+            element={<AddOrdinalNumber />}
+          />
+          <Route
+            path="cap-so/danh-sach-cap-so/chi-tiet/cap-nhat"
+            element={<EditService />}
+          /> */}
+
           <Route path="bao-cao" element={<Report />} />
           <Route path="cai-dat" element={<Setting />} />
 

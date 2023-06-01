@@ -5,6 +5,10 @@ import { Link } from "react-router-dom";
 import { add } from "../../components/icon/icon";
 import { useState } from "react";
 import _ from "lodash";
+import {
+  activeStatusSelect,
+  connectionStatusSelect,
+} from "../../components/configs/SelectConfigs";
 
 interface DataType {
   key: string;
@@ -68,7 +72,7 @@ const columns: ColumnsType<DataType> = [
     key: "serviceUsed",
     render: (serviceUsed) => {
       // const link = `https://www.example.com/service/${serviceUsed}`;
-      const link = `/thiet-bi/danh-sach-thiet-bi/chi-tiet-thiet-bi`;
+      const link = `/thiet-bi/danh-sach-thiet-bi/chi-tiet`;
       return (
         <div>
           {serviceUsed.length > 20
@@ -86,7 +90,7 @@ const columns: ColumnsType<DataType> = [
     key: "detail",
     align: "center",
     render: () => (
-      <a href={"/thiet-bi/danh-sach-thiet-bi/chi-tiet-thiet-bi"}>Chi tiết</a>
+      <a href={"/thiet-bi/danh-sach-thiet-bi/chi-tiet"}>Chi tiết</a>
     ),
   },
   {
@@ -94,13 +98,7 @@ const columns: ColumnsType<DataType> = [
     key: "update",
     align: "center",
     render: () => (
-      <a
-        href={
-          "/thiet-bi/danh-sach-thiet-bi/chi-tiet-thiet-bi/cap-nhat-thiet-bi"
-        }
-      >
-        Cập nhật
-      </a>
+      <a href={"/thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat"}>Cập nhật</a>
     ),
   },
 ];
@@ -234,11 +232,11 @@ const Devices = () => {
 
   const handleActiveStatus = (value: string) => {
     let filteredData: DataType[] = [];
-    if (value === "all") {
+    if (value === "Tất cả") {
       filteredData = data;
     } else {
       filteredData = data.filter(
-        (item) => item.activeStatus === (value === "enable" ? true : false)
+        (item) => item.activeStatus === (value === "Hoạt động" ? true : false)
       );
     }
     setFilteredData(filteredData);
@@ -246,11 +244,11 @@ const Devices = () => {
 
   const handleConnectionStatus = (value: string) => {
     let filteredData: DataType[] = [];
-    if (value === "all") {
+    if (value === "Tất cả") {
       filteredData = data;
     } else {
       filteredData = data.filter(
-        (item) => item.connectionStatus === (value === "connect" ? true : false)
+        (item) => item.connectionStatus === (value === "Kết nối" ? true : false)
       );
     }
     setFilteredData(filteredData);
@@ -287,11 +285,7 @@ const Devices = () => {
                 size="large"
                 onChange={handleActiveStatus}
                 suffixIcon={<CaretDownOutlined />}
-                options={[
-                  { value: "all", label: "Tất cả" },
-                  { value: "enable", label: "Hoạt động" },
-                  { value: "disable", label: "Ngưng hoạt động" },
-                ]}
+                options={activeStatusSelect}
               />
             </Col>
             <Col span={6}>
@@ -301,11 +295,7 @@ const Devices = () => {
                 size="large"
                 onChange={handleConnectionStatus}
                 suffixIcon={<CaretDownOutlined />}
-                options={[
-                  { value: "all", label: "Tất cả" },
-                  { value: "connect", label: "Kết nối" },
-                  { value: "disconnect", label: "Mất kết nối" },
-                ]}
+                options={connectionStatusSelect}
               />
             </Col>
             <Col span={6} offset={6}>

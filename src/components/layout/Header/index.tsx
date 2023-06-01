@@ -85,12 +85,14 @@ const routes = [
             breadcrumb: "Thêm thiết bị",
           },
           {
-            path: "chi-tiet-thiet-bi",
-            breadcrumb: "Chi tiết thiết bị",
-          },
-          {
-            path: "chi-tiet-thiet-bi/cap-nhat-thiet-bi",
-            breadcrumb: "Cập nhật thiết bị",
+            path: "chi-tiet",
+            breadcrumb: "Chi tiết",
+            children: [
+              {
+                path: "cap-nhat",
+                breadcrumb: "Cập nhật",
+              },
+            ],
           },
         ],
       },
@@ -109,12 +111,14 @@ const routes = [
             breadcrumb: "Thêm dịch vụ",
           },
           {
-            path: "chi-tiet-dich-vu",
-            breadcrumb: "Chi tiết dịch vụ",
-          },
-          {
-            path: "chi-tiet-dich-vu/cap-nhat-dich-vu",
-            breadcrumb: "Cập nhật dịch vụ",
+            path: "chi-tiet",
+            breadcrumb: "Chi tiết",
+            children: [
+              {
+                path: "cap-nhat",
+                breadcrumb: "Cập nhật",
+              },
+            ],
           },
         ],
       },
@@ -126,21 +130,23 @@ const routes = [
     children: [
       {
         path: "danh-sach-cap-so",
-        breadcrumb: "Danh sách dịch vụ",
-        // children: [
-        //   {
-        //     path: "them-dich-vu",
-        //     breadcrumb: "Thêm dịch vụ",
-        //   },
-        //   {
-        //     path: "chi-tiet-dich-vu",
-        //     breadcrumb: "Chi tiết dịch vụ",
-        //   },
-        //   {
-        //     path: "chi-tiet-dich-vu/cap-nhat-dich-vu",
-        //     breadcrumb: "Cập nhật dịch vụ",
-        //   },
-        // ],
+        breadcrumb: "Danh sách cấp số",
+        children: [
+          {
+            path: "cap-so-moi",
+            breadcrumb: "Cấp số mới",
+          },
+          {
+            path: "chi-tiet",
+            breadcrumb: "Chi tiết",
+            children: [
+              {
+                path: "cap-nhat",
+                breadcrumb: "Cập nhật",
+              },
+            ],
+          },
+        ],
       },
     ],
   },

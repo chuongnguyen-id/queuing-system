@@ -10,7 +10,10 @@ import {
   Typography,
 } from "antd";
 import { CaretDownOutlined } from "@ant-design/icons";
-import { options } from "./configs";
+import {
+  deviceTypeSelect,
+  serviceSelect,
+} from "../../components/configs/SelectConfigs";
 import { useNavigate } from "react-router-dom";
 
 const AddDevice = () => {
@@ -105,10 +108,7 @@ const AddDevice = () => {
                       placeholder="Chọn loại thiết bị"
                       // onChange={handleChange}
                       suffixIcon={<CaretDownOutlined />}
-                      options={[
-                        { value: "Kiosk", label: "Kiosk" },
-                        { value: "Display counter", label: "Display counter" },
-                      ]}
+                      options={deviceTypeSelect}
                     />
                   </Form.Item>
                   <Form.Item
@@ -153,7 +153,7 @@ const AddDevice = () => {
                       placeholder="Nhập dịch vụ sử dụng"
                       suffixIcon={<CaretDownOutlined />}
                       onChange={handleChange}
-                      options={options}
+                      options={serviceSelect}
                     />
                   </Form.Item>
                 </Col>

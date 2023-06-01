@@ -13,7 +13,7 @@ const DeviceInfo = () => {
             Quản lý thiết bị
           </Title>
           <Button className="popup-button">
-            <Link to="/thiet-bi/danh-sach-thiet-bi/cap-nhat-thiet-bi">
+            <Link to="/thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat">
               <div>{edit}</div>
               <div>Cập nhật thiết bị</div>
             </Link>

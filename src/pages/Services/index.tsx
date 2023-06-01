@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { add, calendar } from "../../components/icon/icon";
 import { useState } from "react";
 import _ from "lodash";
+import { activeStatusSelect } from "../../components/configs/SelectConfigs";
 
 interface DataType {
   key: string;
@@ -58,18 +59,14 @@ const columns: ColumnsType<DataType> = [
     title: " ",
     key: "detail",
     align: "center",
-    render: () => (
-      <a href={"/dich-vu/danh-sach-dich-vu/chi-tiet-dich-vu"}>Chi tiết</a>
-    ),
+    render: () => <a href={"/dich-vu/danh-sach-dich-vu/chi-tiet"}>Chi tiết</a>,
   },
   {
     title: " ",
     key: "update",
     align: "center",
     render: () => (
-      <a href={"/dich-vu/danh-sach-dich-vu/chi-tiet-dich-vu/cap-nhat-dich-vu"}>
-        Cập nhật
-      </a>
+      <a href={"/dich-vu/danh-sach-dich-vu/chi-tiet/cap-nhat"}>Cập nhật</a>
     ),
   },
 ];
@@ -126,11 +123,11 @@ const Services = () => {
 
   const handleActiveStatus = (value: string) => {
     let filteredData: DataType[] = [];
-    if (value === "all") {
+    if (value === "Tất cả") {
       filteredData = data;
     } else {
       filteredData = data.filter(
-        (item) => item.activeStatus === (value === "enable" ? true : false)
+        (item) => item.activeStatus === (value === "Hoạt động" ? true : false)
       );
     }
     setFilteredData(filteredData);
@@ -162,11 +159,7 @@ const Services = () => {
                 size="large"
                 onChange={handleActiveStatus}
                 suffixIcon={<CaretDownOutlined />}
-                options={[
-                  { value: "all", label: "Tất cả" },
-                  { value: "enable", label: "Hoạt động" },
-                  { value: "disable", label: "Ngưng hoạt động" },
-                ]}
+                options={activeStatusSelect}
               />
             </Col>
             <Col span={6}>

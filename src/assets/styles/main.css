@@ -10,6 +10,10 @@ body {
   }
 }
 
+.ant-typography {
+  font-family: "Nunito", sans-serif;
+}
+
 /* --------------------------------Text-------------------------------- */
 
 .text-orange {
@@ -18,6 +22,10 @@ body {
 
 .text-red {
   color: #e73f3f;
+}
+
+.text-gray {
+  color: #535261 !important;
 }
 
 /* --------------------------------Sign In-------------------------------- */
@@ -29,7 +37,7 @@ body {
 .wrapper-center {
   display: flex;
   justify-content: center;
-  align: center;
+  align-items: center;
 }
 
 .submit-button {
@@ -480,7 +488,7 @@ body {
   border-radius: 8px;
 }
 
-/* --------------------------------Devices/Services Table-------------------------------- */
+/* --------------------------------Device/Service/OrdinalNumber Table-------------------------------- */
 .layout-table {
   margin-right: 70px;
 }
@@ -557,7 +565,7 @@ body {
   font-weight: 600;
 }
 
-/* -----Add/Edit Devices/Services----- */
+/* -----Add/Edit Device/Service/OrdinalNumber----- */
 .layout-edit {
   margin-right: 36px;
 }
@@ -621,7 +629,7 @@ body {
   color: #ff9138;
 }
 
-/* -----Info Device----- */
+/* -----Info Device/Service/OrdinalNumber----- */
 .fullheight-card {
   height: calc(100vh - 190px);
 }

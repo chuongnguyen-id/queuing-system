@@ -17,6 +17,7 @@ import { useState } from "react";
 import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { calendar } from "../../components/icon/icon";
 import _ from "lodash";
+import { statusSelect } from "../../components/configs/SelectConfigs";
 
 interface DataType {
   key: string;
@@ -92,18 +93,10 @@ const ServiceInfo = () => {
 
   const handleStatus = (value: string) => {
     let filteredData: DataType[] = [];
-    if (value === "all") {
+    if (value === "Tất cả") {
       filteredData = data;
     } else {
-      filteredData = data.filter(
-        (item) =>
-          item.status ===
-          (value === "accomplished"
-            ? "Đã hoàn thành"
-            : value === "processing"
-            ? "Đang thực hiện"
-            : "Vắng")
-      );
+      filteredData = data.filter((item) => item.status === value);
     }
     setFilteredData(filteredData);
   };
@@ -129,7 +122,7 @@ const ServiceInfo = () => {
             Quản lý dịch vụ
           </Title>
           <Button className="popup-button">
-            <Link to="/dich-vu/danh-sach-dich-vu/cap-nhat-dich-vu">
+            <Link to="/dich-vu/danh-sach-dich-vu/chi-tiet/cap-nhat">
               <div>{edit}</div>
               <div>Cập nhật danh sách</div>
             </Link>
@@ -194,12 +187,7 @@ const ServiceInfo = () => {
                       size="large"
                       onChange={handleStatus}
                       suffixIcon={<CaretDownOutlined />}
-                      options={[
-                        { value: "all", label: "Tất cả" },
-                        { value: "accomplished", label: "Đã hoàn thành" },
-                        { value: "processing", label: "Đang thực hiện" },
-                        { value: "absent", label: "Vắng" },
-                      ]}
+                      options={statusSelect}
                     />
                   </Col>
                   <Col span={10}>

@@ -20,10 +20,11 @@ const ResetPassword = () => {
         <Form onFinish={onFinish} className="row-col" layout="vertical">
           <h3>Đặt lại mật khẩu</h3>
           <Form.Item
-            label="Vui lòng nhập email để đặt lại mật khẩu của bạn *"
+            label="Vui lòng nhập email để đặt lại mật khẩu của bạn"
             name="email"
             rules={[
               {
+                required: true,
                 message: "Xin nhập tên đăng nhập",
               },
             ]}
