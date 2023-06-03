@@ -93,6 +93,27 @@ export const sourceSelect = [
     value: "Kiosk",
   },
   {
-    value: "Hệ thông",
+    value: "Hệ thống",
+  },
+];
+
+export const roleSelect = [
+  {
+    value: "Kế toán",
+  },
+  {
+    value: "Bác sĩ",
+  },
+  {
+    value: "Lễ tân",
+  },
+  {
+    value: "Quản lý",
+  },
+  {
+    value: "Admin",
+  },
+  {
+    value: "Superadmin",
   },
 ];

@@ -24,12 +24,36 @@ function Sidenav() {
       { path: "/cai-dat", key: "6" },
     ].find((item) => currentPath.startsWith(item.path))?.key ?? "";
 
+  const renderMenuItem = (item: any) => {
+    if (item.children) {
+      return (
+        <Menu.SubMenu key={item.key} title={item.label} icon={item.icon}>
+          {item.children.map((child: any) => (
+            <Menu.Item key={`${item.key}-${child.to}`}>
+              <NavLink key={child.to} to={`${item.to}/${child.to}`}>
+                <span>{child.label}</span>
+              </NavLink>
+            </Menu.Item>
+          ))}
+        </Menu.SubMenu>
+      );
+    } else {
+      return (
+        <Menu.Item key={item.key} icon={item.icon}>
+          <NavLink key={item.key} to={item.to}>
+            <span className="label">{item.label}</span>
+          </NavLink>
+        </Menu.Item>
+      );
+    }
+  };
+
   return (
     <>
       <div className="brand">
         <img src={logo} alt="" />
       </div>
-      <Menu mode="inline" defaultSelectedKeys={[currentKey]}>
+      <Menu mode="vertical" defaultSelectedKeys={[currentKey]}>
         {[
           {
             key: "1",
@@ -57,24 +81,31 @@ function Sidenav() {
           },
           {
             key: "5",
-            to: "/bao-cao",
+            to: "/bao-cao/lap-bao-cao",
             icon: report,
             label: "Báo cáo",
           },
           {
             key: "6",
-            to: "/cai-dat",
+            to: "/cai-dat-he-thong",
             icon: setting,
             label: "Cài đặt hệ thống",
+            children: [
+              {
+                to: "quan-ly-vai-tro",
+                label: "Quản lý vai trò",
+              },
+              {
+                to: "quan-ly-tai-khoan",
+                label: "Quản lý tài khoản",
+              },
+              {
+                to: "nhat-ky-hoat-dong",
+                label: "Nhật ký người dùng",
+              },
+            ],
           },
-        ].map((item) => (
-          <Menu.Item key={item.key}>
-            <NavLink key={item.key} to={item.to}>
-              <span className="icon">{item.icon}</span>
-              <span className="label">{item.label}</span>
-            </NavLink>
-          </Menu.Item>
-        ))}
+        ].map(renderMenuItem)}
       </Menu>
       <Button type="primary" className="aside-footer">
         <span className="icon">{logout}</span>

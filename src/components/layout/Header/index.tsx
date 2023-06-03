@@ -72,6 +72,7 @@ const data = [
 
 const routes = [
   { path: "/dashboard", breadcrumb: "Dashboard" },
+  { path: "/profile", breadcrumb: "Thông tin cá nhân" },
   {
     path: "/thiet-bi",
     breadcrumb: "Thiết bị",
@@ -139,19 +140,59 @@ const routes = [
           {
             path: "chi-tiet",
             breadcrumb: "Chi tiết",
-            children: [
-              {
-                path: "cap-nhat",
-                breadcrumb: "Cập nhật",
-              },
-            ],
           },
         ],
       },
     ],
   },
-  { path: "/bao-cao", breadcrumb: "Báo cáo > Lập báo cáo" },
-  { path: "/cai-dat", breadcrumb: "Cài đặt hệ thống > Quản lý vai trò" },
+  {
+    path: "/bao-cao",
+    breadcrumb: "Báo cáo",
+    children: [
+      {
+        path: "lap-bao-cao",
+        breadcrumb: "Lập báo cáo",
+      },
+    ],
+  },
+  {
+    path: "/cai-dat-he-thong",
+    breadcrumb: "Cài đặt hệ thống",
+    children: [
+      {
+        path: "quan-ly-vai-tro",
+        breadcrumb: "Quản lý vai trò",
+        children: [
+          {
+            path: "them-vai-tro",
+            breadcrumb: "Thêm vai trò",
+          },
+          {
+            path: "cap-nhat-vai-tro",
+            breadcrumb: "Cập nhật tài khoản",
+          },
+        ],
+      },
+      {
+        path: "quan-ly-tai-khoan",
+        breadcrumb: "Quản lý tài khoản",
+        children: [
+          {
+            path: "them-tai-khoan",
+            breadcrumb: "Thêm vai trò",
+          },
+          {
+            path: "cap-nhat-tai-khoan",
+            breadcrumb: "Cập nhật tài khoản",
+          },
+        ],
+      },
+      {
+        path: "nhat-ky-hoat-dong",
+        breadcrumb: "Nhật ký hoạt động",
+      },
+    ],
+  },
 ];
 
 const menu = (
@@ -171,14 +212,14 @@ const menu = (
   />
 );
 
-function Header() {
+const Header = () => {
   useEffect(() => window.scrollTo(0, 0));
 
   const breadcrumbs = useBreadcrumbs(routes, { disableDefaults: true });
   return (
     <>
       <Row>
-        <Col span={6} className="nav-breadcrumb">
+        <Col span={12} className="nav-breadcrumb">
           {breadcrumbs.map(({ match, breadcrumb }, index) => (
             <Fragment key={match.pathname}>
               <NavLink to={match.pathname}>{breadcrumb}</NavLink>
@@ -186,8 +227,8 @@ function Header() {
             </Fragment>
           ))}
         </Col>
-        <Col span={18} className="header-control">
-          <Link to="/dang-nhap" className="btn-profile">
+        <Col span={12} className="header-control">
+          <Link to="/profile" className="btn-profile">
             <img src={profile} alt="" />
             <div>
               <div>Xin chào</div>
@@ -209,6 +250,6 @@ function Header() {
       </Row>
     </>
   );
-}
+};
 
 export default Header;

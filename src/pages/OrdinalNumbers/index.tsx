@@ -52,13 +52,13 @@ const columns: ColumnsType<DataType> = [
     title: "Thời gian cấp",
     dataIndex: "issueDate",
     key: "issueDate",
-    render: (date) => moment(date).format("HH:mm - YYYY/MM/DD"),
+    render: (date) => moment(date).format("HH:mm - DD/MM/YYYY"),
   },
   {
     title: "Hạn sử dụng",
     dataIndex: "expirationDate",
     key: "expirationDate",
-    render: (date) => moment(date).format("HH:mm - YYYY/MM/DD"),
+    render: (date) => moment(date).format("HH:mm - DD/MM/YYYY"),
   },
   {
     title: "Trạng thái",
@@ -111,7 +111,7 @@ const data: DataType[] = [
     issueDate: new Date("2023/05/06 15:56"),
     expirationDate: new Date("2023/05/10 15:56"),
     status: "Đang chờ",
-    source: "Kiosk",
+    source: "Hệ thống",
   },
   {
     key: "3",
@@ -125,7 +125,7 @@ const data: DataType[] = [
   },
 ];
 
-const OrdinalNumber = () => {
+const OrdinalNumbers = () => {
   const { Title } = Typography;
   const { RangePicker } = DatePicker;
 
@@ -259,4 +259,4 @@ const OrdinalNumber = () => {
   );
 };
 
-export default OrdinalNumber;
+export default OrdinalNumbers;

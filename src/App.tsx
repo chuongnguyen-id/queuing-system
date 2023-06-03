@@ -6,6 +6,7 @@ import ResetPassword from "./pages/SignIn/ResetPassword/ResetPassword";
 import NewPassword from "./pages/SignIn/ResetPassword/NewPassword";
 import Main from "./components/layout/Main";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 import Devices from "./pages/Devices";
 import AddDevice from "./pages/Devices/AddDevice";
 import DeviceInfo from "./pages/Devices/DeviceInfo";
@@ -14,20 +15,29 @@ import Service from "./pages/Services";
 import AddService from "./pages/Services/AddService";
 import ServiceInfo from "./pages/Services/ServiceInfo";
 import EditService from "./pages/Services/EditService";
-import OrdinalNumber from "./pages/OrdinalNumber";
-import Report from "./pages/Reports";
-import Setting from "./pages/Setting";
-import AddOrdinalNumber from "./pages/OrdinalNumber/AddOrdinalNumber";
+import OrdinalNumbers from "./pages/OrdinalNumbers";
+import AddOrdinalNumber from "./pages/OrdinalNumbers/AddOrdinalNumber";
+import OrdinalNumberInfo from "./pages/OrdinalNumbers/OrdinalNumberInfo";
+import Reports from "./pages/Reports";
+import RoleManagement from "./pages/Setting/RoleManagement";
+import AddRole from "./pages/Setting/RoleManagement/AddRole";
+import EditRole from "./pages/Setting/RoleManagement/EditRole";
+import AccountManagement from "./pages/Setting/AccountManagement";
+import AddAccount from "./pages/Setting/AccountManagement/AddAccount";
+import ActivityLogs from "./pages/Setting/ActivityLogs";
 
 function App() {
   return (
     <div>
       <Routes>
+        {/* Sign In */}
         <Route path="/dang-nhap" element={<SignIn />} />
         <Route path="/quen-mat-khau" element={<ResetPassword />} />
         <Route path="/doi-mat-khau" element={<NewPassword />} />
+
         <Route path="/" element={<Main />}>
           <Route path="dashboard" element={<Home />} />
+          <Route path="profile" element={<Profile />} />
 
           {/* Device */}
           <Route path="thiet-bi/danh-sach-thiet-bi" element={<Devices />} />
@@ -60,23 +70,53 @@ function App() {
           />
 
           {/* Ordinal Number */}
-          <Route path="cap-so/danh-sach-cap-so" element={<OrdinalNumber />} />
+          <Route path="cap-so/danh-sach-cap-so" element={<OrdinalNumbers />} />
           <Route
             path="cap-so/danh-sach-cap-so/cap-so-moi"
             element={<AddOrdinalNumber />}
           />
-          {/* <Route
+          <Route
             path="cap-so/danh-sach-cap-so/chi-tiet"
-            element={<AddOrdinalNumber />}
+            element={<OrdinalNumberInfo />}
+          />
+
+          {/* Report */}
+          <Route path="bao-cao/lap-bao-cao" element={<Reports />} />
+
+          {/* Setting */}
+          {/* Role */}
+          <Route
+            path="cai-dat-he-thong/quan-ly-vai-tro"
+            element={<RoleManagement />}
           />
           <Route
-            path="cap-so/danh-sach-cap-so/chi-tiet/cap-nhat"
-            element={<EditService />}
-          /> */}
+            path="cai-dat-he-thong/quan-ly-vai-tro/them-vai-tro"
+            element={<AddRole />}
+          />
+          <Route
+            path="cai-dat-he-thong/quan-ly-vai-tro/cap-nhat-vai-tro"
+            element={<EditRole />}
+          />
+          {/* Account */}
+          <Route
+            path="cai-dat-he-thong/quan-ly-tai-khoan"
+            element={<AccountManagement />}
+          />
+          <Route
+            path="cai-dat-he-thong/quan-ly-tai-khoan/them-tai-khoan"
+            element={<AddAccount />}
+          />
+          <Route
+            path="cai-dat-he-thong/quan-ly-tai-khoan/cap-nhat-tai-khoan"
+            element={<AccountManagement />}
+          />
+          {/* Activity Log */}
+          <Route
+            path="cai-dat-he-thong/nhat-ky-hoat-dong"
+            element={<ActivityLogs />}
+          />
 
-          <Route path="bao-cao" element={<Report />} />
-          <Route path="cai-dat" element={<Setting />} />
-
+          {/* Not Found */}
           <Route path="*" element={<Navigate to="dashboard" replace />} />
         </Route>
       </Routes>
