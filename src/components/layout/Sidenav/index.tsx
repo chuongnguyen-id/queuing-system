@@ -1,5 +1,5 @@
 import { Menu, Button } from "antd";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
 import {
   dashboard,
@@ -10,6 +10,7 @@ import {
   setting,
   logout,
 } from "./Icon";
+import useUser from "../../../store/selector/useUser";
 
 function Sidenav() {
   const location = useLocation();
@@ -46,6 +47,14 @@ function Sidenav() {
         </Menu.Item>
       );
     }
+  };
+
+  const { signout } = useUser();
+
+  const navigate = useNavigate();
+  const logOut = () => {
+    signout();
+    navigate("/dang-nhap");
   };
 
   return (
@@ -107,7 +116,7 @@ function Sidenav() {
           },
         ].map(renderMenuItem)}
       </Menu>
-      <Button type="primary" className="aside-footer">
+      <Button type="primary" className="aside-footer" onClick={logOut}>
         <span className="icon">{logout}</span>
         <span className="label">Đăng xuất</span>
       </Button>

@@ -1,45 +1,89 @@
-import { Button, Form, Input, Space } from "antd";
+import { Button, Form, Input, Spin } from "antd";
 import SignInLayout from "../SignInLayout";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import useUser from "../../../store/selector/useUser";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  let oobCode: string | null = searchParams.get("oobCode");
+  const [loading, setLoading] = useState(false);
 
-  const onFinish = (values: any) => {
-    navigate("/doi-mat-khau");
-  };
+  const { userState, setErrorIn, resetPassword, setSuccessMsg } = useUser();
+  const { error, success } = userState;
 
-  const onCancel = (event: any) => {
-    event.preventDefault();
-    navigate(-1);
+  useEffect(() => {
+    return () => {
+      if (error) {
+        setErrorIn("");
+      }
+      if (success) {
+        setSuccessMsg("");
+      }
+    };
+  }, [error, setErrorIn, setSuccessMsg, success]);
+
+  const submitHandler = async (value: any) => {
+    try {
+      if (oobCode) {
+        setLoading(true);
+        await resetPassword(oobCode, value.confirmPassword);
+        setLoading(false);
+        setSuccessMsg("");
+        navigate("/dang-nhap");
+      } else {
+        window.alert("Something is wrong; try again later!");
+        console.log("missing oobCode");
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
   };
 
   return (
     <>
       <SignInLayout>
-        <Form onFinish={onFinish} className="row-col" layout="vertical">
-          <h3>Đặt lại mật khẩu</h3>
+        <Form onFinish={submitHandler} layout="vertical" className="row-col">
+          <h3>Đặt lại mật khẩu mới</h3>
           <Form.Item
-            label="Vui lòng nhập email để đặt lại mật khẩu của bạn"
-            name="email"
+            label="Mật khẩu"
+            name="password"
             rules={[
               {
                 required: true,
-                message: "Xin nhập tên đăng nhập",
+                message: "Xin nhập mật khẩu",
               },
             ]}
           >
-            <Input size="large" />
+            <Input.Password />
           </Form.Item>
-          <Form.Item>
-            <Space size="large" className="wrapper-center">
-              <Button onClick={onCancel} className="cancel-button">
-                Hủy
-              </Button>
-              <Button htmlType="submit" className="submit-button">
-                Tiếp tục
-              </Button>
-            </Space>
+          <Form.Item
+            label="Nhập lại mật khẩu"
+            name="confirmPassword"
+            rules={[
+              {
+                required: true,
+                message: "Xin nhập mật khẩu",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Mật khẩu mới mà bạn đã nhập không khớp!")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item className="wrapper-center">
+            <Button htmlType="submit" className="submit-button">
+              {loading ? <Spin /> : "Xác nhận"}
+            </Button>
           </Form.Item>
         </Form>
       </SignInLayout>

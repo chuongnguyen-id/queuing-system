@@ -1,22 +1,48 @@
-import { Button, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Button, Form, Input, Spin } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import SignInLayout from "./SignInLayout";
+import useUser from "../../store/selector/useUser";
+import { useEffect, useState } from "react";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const SignIn = () => {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-  };
+  const navigate = useNavigate();
+  const { userState, setErrorIn, signin } = useUser();
+  const [loading, setLoading] = useState(false);
+  const { error } = userState;
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  useEffect(() => {
+    return () => {
+      if (error) {
+        setErrorIn("");
+      }
+    };
+  }, [error, setErrorIn]);
+
+  const login = async (value: any) => {
+    if (error) {
+      setErrorIn("");
+    }
+    setLoading(true);
+    await signin(
+      {
+        email: value.username + "@gmail.com",
+        password: value.password,
+      },
+      () => setLoading(false)
+    );
+
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 500);
   };
 
   return (
     <>
       <SignInLayout>
         <Form
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
+          onFinish={login}
+          validateTrigger="onSubmit"
           layout="vertical"
           className="row-col"
         >
@@ -44,6 +70,11 @@ const SignIn = () => {
           >
             <Input.Password size="large" />
           </Form.Item>
+          {error && (
+            <p className="text-red">
+              <ExclamationCircleOutlined /> Sai mật khẩu hoặc tên đăng nhập
+            </p>
+          )}
           <p className="font-semibold text-muted">
             <Link to="/quen-mat-khau" className="text-red">
               Quên mật khẩu?
@@ -51,7 +82,7 @@ const SignIn = () => {
           </p>
           <Form.Item className="wrapper-center">
             <Button htmlType="submit" className="submit-button">
-              Đăng nhập
+              {loading ? <Spin /> : "Đăng nhập"}
             </Button>
           </Form.Item>
         </Form>

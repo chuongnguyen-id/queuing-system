@@ -7,28 +7,49 @@ import {
   Row,
   Select,
   Space,
+  Spin,
   Typography,
 } from "antd";
 import { CaretDownOutlined } from "@ant-design/icons";
 import {
   activeStatusSelect,
-  deviceTypeSelect,
   roleSelect,
-  serviceSelect,
 } from "../../../components/configs/SelectConfigs";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import useUser from "../../../store/selector/useUser";
 
 const AddAccount = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
+  const { userState, setErrorIn, signup } = useUser();
+  const [loading, setLoading] = useState(false);
+  const { error } = userState;
 
-  const onFinish = (values: any) => {
-    console.log(values);
-    window.alert(JSON.stringify(values));
-  };
+  useEffect(() => {
+    return () => {
+      if (error) {
+        setErrorIn("");
+      }
+    };
+  }, [error, setErrorIn]);
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const submitHandler = async (value: any) => {
+    if (error) {
+      setErrorIn("");
+    }
+    setLoading(true);
+    await signup(
+      {
+        displayName: value.fullname,
+        email: value.email,
+        password: value.password,
+      },
+      () => setLoading(false)
+    );
+    setTimeout(() => {
+      navigate(-1);
+    }, 500);
   };
 
   const handleChange = (value: string[]) => {
@@ -46,11 +67,7 @@ const AddAccount = () => {
           <Title level={2} className="text-orange">
             Quản lý tài khoản
           </Title>
-          <Form
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            layout="vertical"
-          >
+          <Form onFinish={submitHandler} layout="vertical">
             <Card>
               <Title level={3} className="text-orange">
                 Thông tin tài khoản
@@ -182,7 +199,7 @@ const AddAccount = () => {
                   Hủy bỏ
                 </Button>
                 <Button htmlType="submit" className="submit-button">
-                  Thêm
+                  {loading ? <Spin /> : "Thêm"}
                 </Button>
               </Space>
             </Form.Item>
