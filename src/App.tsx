@@ -25,6 +25,7 @@ import AddRole from "./pages/Setting/RoleManagement/AddRole";
 import EditRole from "./pages/Setting/RoleManagement/EditRole";
 import AccountManagement from "./pages/Setting/AccountManagement";
 import AddAccount from "./pages/Setting/AccountManagement/AddAccount";
+import EditAccount from "./pages/Setting/AccountManagement/EditAccount";
 import ActivityLogs from "./pages/Setting/ActivityLogs";
 
 function App() {
@@ -48,11 +49,11 @@ function App() {
               element={<AddDevice />}
             />
             <Route
-              path="thiet-bi/danh-sach-thiet-bi/chi-tiet"
+              path="thiet-bi/danh-sach-thiet-bi/chi-tiet/:id"
               element={<DeviceInfo />}
             />
             <Route
-              path="thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat"
+              path="thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat/:id"
               element={<EditDevice />}
             />
 
@@ -112,8 +113,8 @@ function App() {
               element={<AddAccount />}
             />
             <Route
-              path="cai-dat-he-thong/quan-ly-tai-khoan/cap-nhat-tai-khoan"
-              element={<AccountManagement />}
+              path="cai-dat-he-thong/quan-ly-tai-khoan/cap-nhat-tai-khoan/:id"
+              element={<EditAccount />}
             />
             {/* Activity Log */}
             <Route

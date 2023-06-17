@@ -1,23 +1,26 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export interface Inputs {
+export interface DeviceType {
   id?: string;
-  code?: string;
-  name?: string;
+  deviceCode?: string;
+  deviceName?: string;
   ipAddress?: string;
+  model?: string;
+  username?: string;
+  password?: string;
   activeStatus?: boolean;
   connectionStatus?: boolean;
-  serviceUsed?: string;
+  usedService?: string;
 }
 
-interface TicketState {
-  devices: Inputs[];
+interface DeviceState {
+  devices: DeviceType[];
   status: "idle" | "loading" | "failed";
   error: string | null;
 }
 
-const initialState: TicketState = {
+const initialState: DeviceState = {
   devices: [],
   status: "idle",
   error: null,
@@ -25,9 +28,9 @@ const initialState: TicketState = {
 
 export const getDevice = createAsyncThunk("devices/getDevice", async () => {
   const response = await axios.get(
-    "https://little-and-little-channel-default-rtdb.firebaseio.com/tickets.json"
+    "https://queuing-system-3b7d7-default-rtdb.firebaseio.com/devices.json"
   );
-  const fetchedDevices: Inputs[] = [];
+  const fetchedDevices: DeviceType[] = [];
   for (let key in response.data) {
     fetchedDevices.push({
       ...response.data[key],
@@ -41,9 +44,9 @@ export const getDeviceById = createAsyncThunk(
   "devices/getDeviceById",
   async (id: string) => {
     const response = await axios.get(
-      `https://little-and-little-channel-default-rtdb.firebaseio.com/tickets/${id}.json`
+      `https://queuing-system-3b7d7-default-rtdb.firebaseio.com/devices/${id}.json`
     );
-    const fetchedDevice: Inputs = {
+    const fetchedDevice: DeviceType = {
       ...response.data,
       id,
     };
@@ -53,12 +56,27 @@ export const getDeviceById = createAsyncThunk(
 
 export const createDevice = createAsyncThunk(
   "devices/createDevice",
-  async (device: Inputs) => {
+  async (device: DeviceType) => {
     const response = await axios.post(
-      "https://little-and-little-channel-default-rtdb.firebaseio.com/tickets.json",
+      "https://queuing-system-3b7d7-default-rtdb.firebaseio.com/devices.json",
       device
     );
-    const fetchedDevice: Inputs = {
+    const fetchedDevice: DeviceType = {
+      ...device,
+      id: response.data,
+    };
+    return fetchedDevice;
+  }
+);
+
+export const updateDevice = createAsyncThunk(
+  "devices/updateDevice",
+  async (device: DeviceType) => {
+    const response = await axios.put(
+      `https://queuing-system-3b7d7-default-rtdb.firebaseio.com/devices/${device.id}.json`,
+      device
+    );
+    const fetchedDevice: DeviceType = {
       ...device,
       id: response.data,
     };
@@ -67,7 +85,7 @@ export const createDevice = createAsyncThunk(
 );
 
 export const deviceSlice = createSlice({
-  name: "tickets",
+  name: "devices",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -77,7 +95,7 @@ export const deviceSlice = createSlice({
       })
       .addCase(
         getDevice.fulfilled,
-        (state, action: PayloadAction<Inputs[]>) => {
+        (state, action: PayloadAction<DeviceType[]>) => {
           state.status = "idle";
           state.devices = action.payload;
         }
@@ -91,7 +109,7 @@ export const deviceSlice = createSlice({
       })
       .addCase(
         getDeviceById.fulfilled,
-        (state, action: PayloadAction<Inputs>) => {
+        (state, action: PayloadAction<DeviceType>) => {
           state.status = "idle";
           state.devices = [action.payload];
         }
@@ -105,7 +123,7 @@ export const deviceSlice = createSlice({
       })
       .addCase(
         createDevice.fulfilled,
-        (state, action: PayloadAction<Inputs>) => {
+        (state, action: PayloadAction<DeviceType>) => {
           state.status = "idle";
           state.devices.push(action.payload);
         }
@@ -113,6 +131,25 @@ export const deviceSlice = createSlice({
       .addCase(createDevice.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Failed to create device";
+      })
+      .addCase(updateDevice.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        updateDevice.fulfilled,
+        (state, action: PayloadAction<DeviceType>) => {
+          state.status = "idle";
+          const deviceIndex = state.devices.findIndex(
+            (d) => d.id === action.payload.id
+          );
+          if (deviceIndex !== -1) {
+            state.devices[deviceIndex] = action.payload;
+          }
+        }
+      )
+      .addCase(updateDevice.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Failed to update device";
       });
   },
 });

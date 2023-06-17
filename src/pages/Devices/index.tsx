@@ -1,35 +1,28 @@
-import { Typography, Table, Select, Col, Row, Input, Button } from "antd";
-import type { ColumnsType } from "antd/es/table";
 import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import { add } from "../../components/icon/icon";
-import { useState } from "react";
+import { Button, Col, Input, Row, Select, Table, Typography } from "antd";
+import type { ColumnsType } from "antd/es/table";
 import _ from "lodash";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   activeStatusSelect,
   connectionStatusSelect,
 } from "../../components/configs/SelectConfigs";
+import { add } from "../../components/icon/icon";
+import { DeviceType, getDevice } from "../../store/reducer/deviceReducer";
+import { useAppDispatch } from "../../store/store";
+import { useSelector } from "react-redux";
 
-interface DataType {
-  key: string;
-  code: string;
-  name: string;
-  ipAddress: string;
-  activeStatus: boolean;
-  connectionStatus: boolean;
-  serviceUsed: string;
-}
-
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<DeviceType> = [
   {
     title: "Mã thiết bị",
-    dataIndex: "code",
-    key: "code",
+    dataIndex: "deviceCode",
+    key: "deviceCode",
   },
   {
     title: "Tên thiết bị",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "deviceName",
+    key: "deviceName",
   },
   {
     title: "Địa chỉ IP",
@@ -68,16 +61,14 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Dịch vụ sử dụng",
-    dataIndex: "serviceUsed",
-    key: "serviceUsed",
-    render: (serviceUsed) => {
-      // const link = `https://www.example.com/service/${serviceUsed}`;
+    dataIndex: "usedService",
+    key: "usedService",
+    render: (usedService) => {
       const link = `/thiet-bi/danh-sach-thiet-bi/chi-tiet`;
+      const services = usedService.join(", ");
       return (
         <div>
-          {serviceUsed.length > 20
-            ? serviceUsed.slice(0, 20) + "..."
-            : serviceUsed}
+          {services.length > 20 ? services.slice(0, 20) + "..." : services}
           <div>
             <a href={link}>Xem thêm</a>
           </div>
@@ -89,166 +80,58 @@ const columns: ColumnsType<DataType> = [
     title: " ",
     key: "detail",
     align: "center",
-    render: () => (
-      <a href={"/thiet-bi/danh-sach-thiet-bi/chi-tiet"}>Chi tiết</a>
+    render: (record) => (
+      <a href={`/thiet-bi/danh-sach-thiet-bi/chi-tiet/${record.id}`}>
+        Chi tiết
+      </a>
     ),
   },
   {
     title: " ",
     key: "update",
     align: "center",
-    render: () => (
-      <a href={"/thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat"}>Cập nhật</a>
+    render: (record) => (
+      <a href={`/thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat/${record.id}`}>
+        Cập nhật
+      </a>
     ),
-  },
-];
-
-const data: DataType[] = [
-  {
-    key: "1",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: false,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "2",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: true,
-    connectionStatus: false,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "3",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: true,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "4",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: false,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "5",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: false,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "6",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: true,
-    connectionStatus: false,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "7",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: true,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "8",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: false,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "9",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: false,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "10",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: true,
-    connectionStatus: false,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "11",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: true,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
-  },
-  {
-    key: "12",
-    code: "KIO_01",
-    name: "kiosk",
-    ipAddress: "192.168.1.10",
-    activeStatus: false,
-    connectionStatus: true,
-    serviceUsed:
-      "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, Khám tai mũi họng, Khám hô hấp, Khám tổng quát",
   },
 ];
 
 const Devices = () => {
   const { Title } = Typography;
+  const [loading, setLoading] = useState(true);
+
+  const dispatch = useAppDispatch();
+  const data = useSelector((state: any) => state.device.devices);
   const [filteredData, setFilteredData] = useState(data);
 
+  useEffect(() => {
+    dispatch(getDevice()).finally(() => setLoading(false));
+    setFilteredData(data);
+  }, [dispatch, data]);
+
   const handleActiveStatus = (value: string) => {
-    let filteredData: DataType[] = [];
+    let filteredData: DeviceType[] = [];
     if (value === "Tất cả") {
       filteredData = data;
     } else {
       filteredData = data.filter(
-        (item) => item.activeStatus === (value === "Hoạt động" ? true : false)
+        (item: { activeStatus: boolean }) =>
+          item.activeStatus === (value === "Hoạt động" ? true : false)
       );
     }
     setFilteredData(filteredData);
   };
 
   const handleConnectionStatus = (value: string) => {
-    let filteredData: DataType[] = [];
+    let filteredData: DeviceType[] = [];
     if (value === "Tất cả") {
       filteredData = data;
     } else {
       filteredData = data.filter(
-        (item) => item.connectionStatus === (value === "Kết nối" ? true : false)
+        (item: { connectionStatus: boolean }) =>
+          item.connectionStatus === (value === "Kết nối" ? true : false)
       );
     }
     setFilteredData(filteredData);
@@ -258,10 +141,10 @@ const Devices = () => {
     const newData = _.filter(data, (item) => {
       return _.includes(
         (
-          item.code +
-          item.name +
+          item.deviceCode +
+          item.deviceName +
           item.ipAddress +
-          item.serviceUsed
+          item.usedService
         ).toLowerCase(),
         searchText.toLowerCase()
       );
@@ -315,7 +198,13 @@ const Devices = () => {
               <div>Thêm thiết bị</div>
             </Link>
           </Button>
-          <Table columns={columns} dataSource={filteredData} bordered />
+          <Table
+            key={filteredData.map((item: any) => item.id).join(",")}
+            columns={columns}
+            dataSource={filteredData}
+            loading={loading}
+            bordered
+          />
         </div>
       </div>
     </>

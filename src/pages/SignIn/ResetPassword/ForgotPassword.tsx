@@ -2,15 +2,15 @@ import { Button, Form, Input, Space, Spin, notification } from "antd";
 import SignInLayout from "../SignInLayout";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useUser from "../../../store/selector/useUser";
+import useAuth from "../../../store/selector/useAuth";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
-  const { userState, setErrorIn, forgotPassword, setSuccessMsg } = useUser();
-  const { error, success } = userState;
+  const { AuthState, setErrorIn, forgotPassword, setSuccessMsg } = useAuth();
+  const { error, success } = AuthState;
 
   const openNotification = () => {
     notification.success({
@@ -61,7 +61,11 @@ const ForgotPassword = () => {
             rules={[
               {
                 required: true,
-                message: "Xin nhập tên đăng nhập",
+                message: "Xin nhập email xác thực",
+              },
+              {
+                type: "email",
+                message: "Email không đúng định dạng",
               },
             ]}
           >

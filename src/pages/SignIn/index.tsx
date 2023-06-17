@@ -1,15 +1,15 @@
 import { Button, Form, Input, Spin } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import SignInLayout from "./SignInLayout";
-import useUser from "../../store/selector/useUser";
 import { useEffect, useState } from "react";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import useAuth from "../../store/selector/useAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { userState, setErrorIn, signin } = useUser();
+  const { AuthState, setErrorIn, signin } = useAuth();
   const [loading, setLoading] = useState(false);
-  const { error } = userState;
+  const { error } = AuthState;
 
   useEffect(() => {
     return () => {

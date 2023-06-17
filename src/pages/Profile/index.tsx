@@ -1,23 +1,17 @@
 import { Avatar, Card, Col, Form, Input, Row, Typography } from "antd";
 import avatar from "../../assets/images/bigavatar.png";
 import { camera } from "../../components/icon/icon";
-
-const initialValues = {
-  fullname: "Lê Quỳnh Ái Vân",
-  username: "lequynhaivan01",
-  phoneNumber: "0767375921",
-  password: "311940211",
-  email: "adminSSO1@domain.com",
-  role: "Kế toán",
-};
+import { useSelector } from "react-redux";
 
 const Profile = () => {
   const { Title } = Typography;
+  const data = useSelector((state: any) => state.profile.users[0]);
+
   return (
     <>
       <div className="layout-content">
         <div className="layout-table">
-          <Form initialValues={initialValues} layout="vertical" disabled>
+          <Form initialValues={data} layout="vertical" disabled>
             <Card>
               <Row gutter={24}>
                 <Col span={6}>
@@ -26,7 +20,7 @@ const Profile = () => {
                     <div className="camera-icon">{camera}</div>
                   </div>
                   <Title level={3} className="profile-name wrapper-center">
-                    {initialValues.fullname}
+                    {data.fullname}
                   </Title>
                 </Col>
                 <Col span={9}>

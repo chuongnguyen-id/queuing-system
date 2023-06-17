@@ -10,7 +10,7 @@ import {
   setting,
   logout,
 } from "./Icon";
-import useUser from "../../../store/selector/useUser";
+import useUser from "../../../store/selector/useAuth";
 
 function Sidenav() {
   const location = useLocation();

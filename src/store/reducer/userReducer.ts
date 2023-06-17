@@ -1,82 +1,92 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
 
-interface User {
-  firstName: string;
+export interface UserType {
   email: string;
-  id: string;
-  createdAt: any;
-}
-
-interface AuthState {
-  user: User | null;
-  authenticated: boolean;
-  loading: boolean;
-  error: string;
-  needVerification: boolean;
-  success: string;
-}
-
-export interface SignUpData {
-  displayName: string;
-  email: string;
+  username: string;
   password: string;
+  uid: string;
+  fullname: string;
+  phoneNumber: string;
+  role: string;
+  activeStatus: string;
 }
 
-export interface SignInData {
-  email: string;
-  password: string;
+interface UserState {
+  users: UserType[];
+  status: "idle" | "loading" | "failed";
+  error: string | null;
 }
 
-const initialState: AuthState = {
-  user: null,
-  authenticated: false,
-  loading: false,
-  error: "",
-  needVerification: false,
-  success: "",
+const initialState: UserState = {
+  users: [],
+  status: "idle",
+  error: null,
 };
+
+export const getUser = createAsyncThunk("users/getUser", async () => {
+  const response = await axios.get(
+    "https://queuing-system-3b7d7-default-rtdb.firebaseio.com/users.json"
+  );
+  const fetchedUsers: UserType[] = [];
+  for (let key in response.data) {
+    fetchedUsers.push({
+      ...response.data[key],
+      id: key,
+    });
+  }
+  return fetchedUsers;
+});
+
+export const getUserById = createAsyncThunk(
+  "users/getUserById",
+  async (id: string) => {
+    const response = await axios.get(
+      `https://queuing-system-3b7d7-default-rtdb.firebaseio.com/users/${id}.json`
+    );
+    const fetchedUser: UserType = {
+      ...response.data,
+      id,
+    };
+    return fetchedUser;
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
-  reducers: {
-    login: (state, action: PayloadAction<any>) => {
-      state.user = action.payload;
-      state.authenticated = true;
-    },
-    setError: (state, action: PayloadAction<any>) => {
-      state.error = action.payload;
-      state.authenticated = false;
-    },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    logout: (state) => {
-      state.user = null;
-      state.authenticated = false;
-      state.loading = false;
-      state.error = "";
-    },
-    needVerify: (state) => {
-      state.needVerification = true;
-    },
-    setSuccess: (state, action: PayloadAction<any>) => {
-      state.success = action.payload;
-    },
-    setAuthForm: (state) => {
-      state.authenticated = true;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getUser.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        getUser.fulfilled,
+        (state, action: PayloadAction<UserType[]>) => {
+          state.status = "idle";
+          state.users = action.payload;
+        }
+      )
+      .addCase(getUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Failed to fetch users";
+      })
+      .addCase(getUserById.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        getUserById.fulfilled,
+        (state, action: PayloadAction<UserType>) => {
+          state.status = "idle";
+          state.users = [action.payload];
+        }
+      )
+      .addCase(getUserById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Failed to fetch users";
+      });
   },
 });
-
-export const {
-  login,
-  logout,
-  needVerify,
-  setError,
-  setLoading,
-  setSuccess,
-  setAuthForm,
-} = userSlice.actions;
 
 export default userSlice.reducer;

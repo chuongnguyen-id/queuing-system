@@ -3,21 +3,14 @@ import type { ColumnsType } from "antd/es/table";
 import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { add } from "../../../components/icon/icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import _ from "lodash";
 import { roleSelect } from "../../../components/configs/SelectConfigs";
+import { UserType, getUser } from "../../../store/reducer/userReducer";
+import { useAppDispatch } from "../../../store/store";
+import { useSelector } from "react-redux";
 
-interface DataType {
-  key: string;
-  username: string;
-  fullname: string;
-  phoneNumber: string;
-  email: string;
-  role: string;
-  activeStatus: boolean;
-}
-
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<UserType> = [
   {
     title: "Tên đăng nhập",
     dataIndex: "username",
@@ -63,119 +56,28 @@ const columns: ColumnsType<DataType> = [
     title: " ",
     key: "update",
     align: "center",
-    render: () => (
-      <a href={"/cai-dat-he-thong/quan-ly-tai-khoan/cap-nhat-tai-khoan"}>
+    render: (record) => (
+      <a
+        href={`/cai-dat-he-thong/quan-ly-tai-khoan/cap-nhat-tai-khoan/${record.id}`}
+      >
         Cập nhật
       </a>
     ),
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: true,
-  },
-  {
-    key: "2",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: true,
-  },
-  {
-    key: "3",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: true,
-  },
-  {
-    key: "4",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: true,
-  },
-  {
-    key: "5",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: true,
-  },
-  {
-    key: "6",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: true,
-  },
-  {
-    key: "7",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: true,
-  },
-  {
-    key: "8",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: false,
-  },
-  {
-    key: "9",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: false,
-  },
-  {
-    key: "10",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: true,
-  },
-  {
-    key: "11",
-    username: "tuyetnguyen@12",
-    fullname: "Nguyen Văn A",
-    phoneNumber: "0919256712",
-    email: "tuyetnguyen123@gmail.com",
-    role: "Kế toán",
-    activeStatus: false,
-  },
-];
-
 const AccountManagement = () => {
   const { Title } = Typography;
+  const [loading, setLoading] = useState(true);
+
+  const dispatch = useAppDispatch();
+  const data = useSelector((state: any) => state.user.users);
   const [filteredData, setFilteredData] = useState(data);
+
+  useEffect(() => {
+    dispatch(getUser()).finally(() => setLoading(false));
+    setFilteredData(data);
+  }, [dispatch, data]);
 
   const handleSearch = (searchText: string) => {
     const newData = _.filter(data, (item) => {
@@ -195,8 +97,8 @@ const AccountManagement = () => {
   };
 
   const handleRole = (value: string) => {
-    let filteredData: DataType[] = [];
-    filteredData = data.filter((item) => item.role === value);
+    let filteredData: UserType[] = [];
+    filteredData = data.filter((item: { role: string }) => item.role === value);
     setFilteredData(filteredData);
   };
 
@@ -209,7 +111,7 @@ const AccountManagement = () => {
           </Title>
           <Row gutter={24}>
             <Col span={6}>
-              <div>Trạng thái hoạt động</div>
+              <div>Tên vai trò</div>
               <Select
                 defaultValue="Tất cả"
                 size="large"
@@ -235,7 +137,12 @@ const AccountManagement = () => {
               <div>Thêm tài khoản</div>
             </Link>
           </Button>
-          <Table columns={columns} dataSource={filteredData} bordered />
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+            loading={loading}
+            bordered
+          />
         </div>
       </div>
     </>

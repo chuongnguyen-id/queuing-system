@@ -1,3 +1,5 @@
+import { CaretDownOutlined } from "@ant-design/icons";
+import { unwrapResult } from "@reduxjs/toolkit";
 import {
   Button,
   Card,
@@ -7,30 +9,43 @@ import {
   Row,
   Select,
   Space,
+  Spin,
   Typography,
 } from "antd";
-import { CaretDownOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   deviceTypeSelect,
   serviceSelect,
 } from "../../components/configs/SelectConfigs";
-import { useNavigate } from "react-router-dom";
+import { DeviceType, createDevice } from "../../store/reducer/deviceReducer";
+import { useAppDispatch } from "../../store/store";
 
 const AddDevice = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const onFinish = (values: any) => {
-    console.log(values);
-    window.alert(JSON.stringify(values));
-  };
+  const dispatch = useAppDispatch();
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
+  const onFinish = (value: DeviceType) => {
+    setLoading(true);
+    const device = {
+      ...value,
+      activeStatus: true,
+      connectionStatus: true,
+    };
+    dispatch(createDevice(device))
+      .then(unwrapResult)
+      .then(() => {
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const onCancel = () => {
@@ -44,11 +59,7 @@ const AddDevice = () => {
           <Title level={2} className="text-orange">
             Quản lý thiết bị
           </Title>
-          <Form
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            layout="vertical"
-          >
+          <Form onFinish={onFinish} layout="vertical">
             <Card>
               <Title level={3} className="text-orange">
                 Thông tin thiết bị
@@ -106,7 +117,6 @@ const AddDevice = () => {
                     <Select
                       size="large"
                       placeholder="Chọn loại thiết bị"
-                      // onChange={handleChange}
                       suffixIcon={<CaretDownOutlined />}
                       options={deviceTypeSelect}
                     />
@@ -152,7 +162,6 @@ const AddDevice = () => {
                       size="large"
                       placeholder="Nhập dịch vụ sử dụng"
                       suffixIcon={<CaretDownOutlined />}
-                      onChange={handleChange}
                       options={serviceSelect}
                     />
                   </Form.Item>
@@ -168,7 +177,7 @@ const AddDevice = () => {
                   Hủy bỏ
                 </Button>
                 <Button htmlType="submit" className="submit-button">
-                  Thêm thiết bị
+                  {loading ? <Spin /> : "Thêm thiết bị"}
                 </Button>
               </Space>
             </Form.Item>

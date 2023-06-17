@@ -35,11 +35,7 @@ const EditService = () => {
           <Title level={2} className="text-orange">
             Quản lý dịch vụ
           </Title>
-          <Form
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            layout="vertical"
-          >
+          <Form onFinish={onFinish} layout="vertical">
             <Card>
               <Title level={3} className="text-orange">
                 Thông tin dịch vụ

@@ -1,10 +1,14 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-import { Row, Col, Badge, Dropdown, List } from "antd";
+import { Row, Col, Badge, Dropdown, List, Spin } from "antd";
 
 import { Link, NavLink } from "react-router-dom";
 import profile from "../../../assets/images/avatar.png";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
+import { useAppDispatch } from "../../../store/store";
+import { useSelector } from "react-redux";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getProfile } from "../../../store/reducer/profileReducer";
 
 const bell = [
   <svg
@@ -27,7 +31,7 @@ const bell = [
   </svg>,
 ];
 
-const data = [
+const notification = [
   {
     title: "Nguyễn Thị Thùy Dung",
     description: "12h20 ngày 30/11/2021",
@@ -199,7 +203,7 @@ const menu = (
   <List
     className="header-notifications-dropdown"
     itemLayout="horizontal"
-    dataSource={data}
+    dataSource={notification}
     header={<div>Thông báo</div>}
     renderItem={(item) => (
       <List.Item>
@@ -214,6 +218,19 @@ const menu = (
 
 const Header = () => {
   useEffect(() => window.scrollTo(0, 0));
+  const [loading, setLoading] = useState(true);
+
+  const dispatch = useAppDispatch();
+  const data = useSelector((state: any) => state.profile.users[0]);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(getProfile(user.uid)).finally(() => setLoading(false));
+      }
+    });
+  }, [dispatch]);
 
   const breadcrumbs = useBreadcrumbs(routes, { disableDefaults: true });
   return (
@@ -232,10 +249,10 @@ const Header = () => {
             <img src={profile} alt="" />
             <div>
               <div>Xin chào</div>
-              <div>Lê Quỳnh Ái Vân</div>
+              <div>{loading ? <Spin /> : data.fullname}</div>
             </div>
           </Link>
-          <Badge size="small" count={data.length}>
+          <Badge size="small" count={notification.length}>
             <Dropdown overlay={menu} trigger={["click"]}>
               <a
                 href="#pablo"

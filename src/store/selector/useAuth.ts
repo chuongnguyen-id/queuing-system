@@ -10,7 +10,7 @@ import {
   setLoading,
   setSuccess,
   setAuthForm,
-} from "../reducer/userReducer";
+} from "../reducer/authReducer";
 
 import {
   createUserWithEmailAndPassword,
@@ -20,12 +20,12 @@ import {
   signOut,
   confirmPasswordReset,
 } from "firebase/auth";
-import { serverTimestamp } from "firebase/firestore";
 import { auth } from "../../firebase";
+import axios from "axios";
 
-const useUser = () => {
+const useAuth = () => {
   const dispatch = useAppDispatch();
-  const userState = useAppSelector((state) => state.user);
+  const AuthState = useAppSelector((state) => state.auth);
 
   const signup = async (data: SignUpData, onError: () => void) => {
     try {
@@ -37,12 +37,20 @@ const useUser = () => {
       if (res.user) {
         const userData: any = {
           email: res.user.email,
-          displayName: res.user.displayName ?? res.user.email?.slice(0, 8),
+          username: res.user.email?.slice(0, res.user.email.indexOf("@")),
+          password: data.password,
           uid: res.user.uid,
-          createdAt: serverTimestamp(),
+          fullname: data.fullname,
+          phoneNumber: data.phoneNumber,
+          role: data.role,
+          activeStatus: data.activeStatus,
         };
+        await axios.post(
+          `https://queuing-system-3b7d7-default-rtdb.firebaseio.com/users.json`,
+          userData
+        );
         dispatch(needVerify());
-        if (!userState.needVerification) {
+        if (!AuthState.needVerification) {
           await sendEmailVerification(res!.user);
         }
 
@@ -125,7 +133,7 @@ const useUser = () => {
   };
 
   return {
-    userState,
+    AuthState,
     forgotPassword,
     resetPassword,
     setNeedVerification,
@@ -140,4 +148,4 @@ const useUser = () => {
   };
 };
 
-export default useUser;
+export default useAuth;

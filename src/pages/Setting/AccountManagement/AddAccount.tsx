@@ -17,14 +17,16 @@ import {
 } from "../../../components/configs/SelectConfigs";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useUser from "../../../store/selector/useUser";
+import useAuth from "../../../store/selector/useAuth";
 
 const AddAccount = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
-  const { userState, setErrorIn, signup } = useUser();
+  const { AuthState, setErrorIn, signup } = useAuth();
+  const { error } = AuthState;
+
   const [loading, setLoading] = useState(false);
-  const { error } = userState;
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     return () => {
@@ -34,26 +36,16 @@ const AddAccount = () => {
     };
   }, [error, setErrorIn]);
 
-  const submitHandler = async (value: any) => {
+  const onFinish = async (value: any) => {
     if (error) {
       setErrorIn("");
     }
     setLoading(true);
-    await signup(
-      {
-        displayName: value.fullname,
-        email: value.email,
-        password: value.password,
-      },
-      () => setLoading(false)
-    );
+    await signup(value, () => setLoading(false));
+    console.log(value);
     setTimeout(() => {
       navigate(-1);
     }, 500);
-  };
-
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
   };
 
   const onCancel = () => {
@@ -67,7 +59,7 @@ const AddAccount = () => {
           <Title level={2} className="text-orange">
             Quản lý tài khoản
           </Title>
-          <Form onFinish={submitHandler} layout="vertical">
+          <Form onFinish={onFinish} layout="vertical">
             <Card>
               <Title level={3} className="text-orange">
                 Thông tin tài khoản
@@ -106,9 +98,19 @@ const AddAccount = () => {
                         required: true,
                         message: "Vui lòng nhập email",
                       },
+                      {
+                        type: "email",
+                        message: "Email không đúng định dạng",
+                      },
                     ]}
                   >
-                    <Input size="large" placeholder="Nhập email" />
+                    <Input
+                      size="large"
+                      placeholder="Nhập email"
+                      onChange={(e) =>
+                        setUsername(e.target.value.split("@")[0])
+                      }
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Vai trò"
@@ -123,7 +125,6 @@ const AddAccount = () => {
                     <Select
                       size="large"
                       placeholder="Chọn vai trò"
-                      // onChange={handleChange}
                       suffixIcon={<CaretDownOutlined />}
                       options={roleSelect}
                     />
@@ -132,7 +133,6 @@ const AddAccount = () => {
                 <Col span={12}>
                   <Form.Item
                     label="Tên đăng nhập"
-                    name="username"
                     rules={[
                       {
                         required: true,
@@ -140,7 +140,12 @@ const AddAccount = () => {
                       },
                     ]}
                   >
-                    <Input size="large" placeholder="Nhập tên đăng nhập" />
+                    <Input
+                      name="email"
+                      size="large"
+                      placeholder="Nhập tên đăng nhập"
+                      value={username}
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Mật khẩu"
@@ -156,12 +161,22 @@ const AddAccount = () => {
                   </Form.Item>
                   <Form.Item
                     label="Nhập lại mật khẩu"
-                    name="enterPassword"
+                    name="confirmPassword"
                     rules={[
                       {
                         required: true,
                         message: "Vui lòng nhập lại mật khẩu",
                       },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("Mật khẩu mới mà bạn đã nhập không khớp!")
+                          );
+                        },
+                      }),
                     ]}
                   >
                     <Input.Password
@@ -182,7 +197,6 @@ const AddAccount = () => {
                     <Select
                       size="large"
                       placeholder="Nhập tình trạng"
-                      // onChange={handleChange}
                       suffixIcon={<CaretDownOutlined />}
                       options={activeStatusSelect}
                     />

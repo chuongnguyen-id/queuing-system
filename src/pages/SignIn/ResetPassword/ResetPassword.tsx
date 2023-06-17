@@ -2,7 +2,7 @@ import { Button, Form, Input, Spin } from "antd";
 import SignInLayout from "../SignInLayout";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useUser from "../../../store/selector/useUser";
+import useAuth from "../../../store/selector/useAuth";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -10,8 +10,8 @@ const ResetPassword = () => {
   let oobCode: string | null = searchParams.get("oobCode");
   const [loading, setLoading] = useState(false);
 
-  const { userState, setErrorIn, resetPassword, setSuccessMsg } = useUser();
-  const { error, success } = userState;
+  const { AuthState, setErrorIn, resetPassword, setSuccessMsg } = useAuth();
+  const { error, success } = AuthState;
 
   useEffect(() => {
     return () => {
