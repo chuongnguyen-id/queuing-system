@@ -42,7 +42,6 @@ const AddAccount = () => {
     }
     setLoading(true);
     await signup(value, () => setLoading(false));
-    console.log(value);
     setTimeout(() => {
       navigate(-1);
     }, 500);
@@ -145,6 +144,7 @@ const AddAccount = () => {
                       size="large"
                       placeholder="Nhập tên đăng nhập"
                       value={username}
+                      readOnly
                     />
                   </Form.Item>
                   <Form.Item

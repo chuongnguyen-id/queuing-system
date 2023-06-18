@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, useEffect, useState } from "react";
 
 import { Row, Col, Badge, Dropdown, List, Spin } from "antd";
@@ -218,7 +219,9 @@ const menu = (
 
 const Header = () => {
   useEffect(() => window.scrollTo(0, 0));
+  const breadcrumbs = useBreadcrumbs(routes, { disableDefaults: true });
   const [loading, setLoading] = useState(true);
+  const [fullname, setFullname] = useState("");
 
   const dispatch = useAppDispatch();
   const data = useSelector((state: any) => state.profile.users[0]);
@@ -230,9 +233,12 @@ const Header = () => {
         dispatch(getProfile(user.uid)).finally(() => setLoading(false));
       }
     });
+
+    if (data) {
+      setFullname(data.fullname);
+    }
   }, [dispatch]);
 
-  const breadcrumbs = useBreadcrumbs(routes, { disableDefaults: true });
   return (
     <>
       <Row>
@@ -249,7 +255,7 @@ const Header = () => {
             <img src={profile} alt="" />
             <div>
               <div>Xin chào</div>
-              <div>{loading ? <Spin /> : data.fullname}</div>
+              <div>{!loading && data ? fullname : <Spin />}</div>
             </div>
           </Link>
           <Badge size="small" count={notification.length}>

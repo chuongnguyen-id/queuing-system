@@ -19,7 +19,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../store/store";
 import { useSelector } from "react-redux";
-import { getUserById } from "../../../store/reducer/userReducer";
+import {
+  UserType,
+  getUserById,
+  updateUser,
+} from "../../../store/reducer/userReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const EditAccount = () => {
   const { Title } = Typography;
@@ -36,9 +41,19 @@ const EditAccount = () => {
     }
   }, [dispatch, id]);
 
-  const onFinish = (values: any) => {
-    console.log(values);
-    window.alert(JSON.stringify(values));
+  const onFinish = (value: UserType) => {
+    setLoading(true);
+    dispatch(updateUser({ ...value, id: id }))
+      .then(unwrapResult)
+      .then(() => {
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const onCancel = () => {
@@ -96,7 +111,7 @@ const EditAccount = () => {
                         },
                       ]}
                     >
-                      <Input size="large" placeholder="Nhập email" />
+                      <Input size="large" placeholder="Nhập email" readOnly />
                     </Form.Item>
                     <Form.Item
                       label="Vai trò"
@@ -127,7 +142,11 @@ const EditAccount = () => {
                         },
                       ]}
                     >
-                      <Input size="large" placeholder="Nhập tên đăng nhập" />
+                      <Input
+                        size="large"
+                        placeholder="Nhập tên đăng nhập"
+                        readOnly
+                      />
                     </Form.Item>
                     <Form.Item
                       label="Mật khẩu"
@@ -142,11 +161,12 @@ const EditAccount = () => {
                       <Input.Password
                         size="large"
                         placeholder="Nhập mật khẩu"
+                        readOnly
                       />
                     </Form.Item>
                     <Form.Item
                       label="Nhập lại mật khẩu"
-                      name="enterPassword"
+                      name="password"
                       rules={[
                         {
                           required: true,
@@ -157,6 +177,7 @@ const EditAccount = () => {
                       <Input.Password
                         size="large"
                         placeholder="Nhập lại mật khẩu"
+                        readOnly
                       />
                     </Form.Item>
                     <Form.Item

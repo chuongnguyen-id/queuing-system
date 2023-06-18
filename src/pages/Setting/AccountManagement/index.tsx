@@ -42,12 +42,11 @@ const columns: ColumnsType<UserType> = [
     dataIndex: "activeStatus",
     key: "activeStatus",
     render: (activeStatus) => {
-      const color = activeStatus ? "#34CD26" : "#EC3740";
-      const text = activeStatus ? "Hoạt động" : "Ngưng hoạt động";
+      const color = activeStatus === "Hoạt động" ? "#34CD26" : "#EC3740";
       return (
         <div>
           <span style={{ color: color }}>●&nbsp;</span>
-          {text}
+          {activeStatus}
         </div>
       );
     },

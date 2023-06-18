@@ -10,14 +10,17 @@ import {
   Table,
   Typography,
 } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { back, edit } from "../../components/icon/icon";
 import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { calendar } from "../../components/icon/icon";
 import _ from "lodash";
 import { statusSelect } from "../../components/configs/SelectConfigs";
+import { useAppDispatch } from "../../store/store";
+import { useSelector } from "react-redux";
+import { getServiceById } from "../../store/reducer/serviceReducer";
 
 interface DataType {
   key: string;
@@ -52,7 +55,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [
+const data1: DataType[] = [
   {
     key: "1",
     stt: "2010001",
@@ -88,21 +91,32 @@ const data: DataType[] = [
 const ServiceInfo = () => {
   const { Title } = Typography;
   const { RangePicker } = DatePicker;
-  const [filteredData, setFilteredData] = useState(data);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [filteredData, setFilteredData] = useState(data1);
+
+  const dispatch = useAppDispatch();
+  const data = useSelector((state: any) => state.service.services[0]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getServiceById(id)).finally(() => setLoading(false));
+    }
+  }, [dispatch, id]);
 
   const handleStatus = (value: string) => {
     let filteredData: DataType[] = [];
     if (value === "Tất cả") {
-      filteredData = data;
+      filteredData = data1;
     } else {
-      filteredData = data.filter((item) => item.status === value);
+      filteredData = data1.filter((item) => item.status === value);
     }
     setFilteredData(filteredData);
   };
 
   const handleSearch = (searchText: string) => {
-    const newData = _.filter(data, (item) => {
+    const newData = _.filter(data1, (item) => {
       return _.includes(item.stt.toLowerCase(), searchText.toLowerCase());
     });
 
@@ -122,7 +136,7 @@ const ServiceInfo = () => {
             Quản lý dịch vụ
           </Title>
           <Button className="popup-button">
-            <Link to="/dich-vu/danh-sach-dich-vu/chi-tiet/cap-nhat">
+            <Link to={`/dich-vu/danh-sach-dich-vu/chi-tiet/cap-nhat/${id}`}>
               <div>{edit}</div>
               <div>Cập nhật danh sách</div>
             </Link>
@@ -141,15 +155,21 @@ const ServiceInfo = () => {
                 <Title level={3} className="text-orange">
                   Thông tin thiết bị
                 </Title>
-                <Descriptions column={1}>
-                  <Descriptions.Item label="Mã dịch vụ">201</Descriptions.Item>
-                  <Descriptions.Item label="Tên dịch vụ">
-                    Khám tim mạch
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Mô tả">
-                    Chuyên các bệnh lý về tim
-                  </Descriptions.Item>
-                </Descriptions>
+                {loading ? (
+                  <div>Đang tải...</div>
+                ) : (
+                  <Descriptions column={1}>
+                    <Descriptions.Item label="Mã dịch vụ">
+                      {data.serviceCode}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Tên dịch vụ">
+                      {data.serviceName}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Mô tả">
+                      {data.description}
+                    </Descriptions.Item>
+                  </Descriptions>
+                )}
 
                 <Title level={3} className="text-orange">
                   Quy tắc cấp số

@@ -2,14 +2,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export interface UserType {
-  email: string;
-  username: string;
-  password: string;
+  id?: string;
+  email?: string;
+  username?: string;
+  password?: string;
   uid: string;
-  fullname: string;
-  phoneNumber: string;
-  role: string;
-  activeStatus: string;
+  fullname?: string;
+  phoneNumber?: string;
+  role?: string;
+  activeStatus?: string;
 }
 
 interface UserState {
@@ -52,6 +53,36 @@ export const getUserById = createAsyncThunk(
   }
 );
 
+export const createUser = createAsyncThunk(
+  "devices/createDevice",
+  async (user: UserType) => {
+    const response = await axios.post(
+      "https://queuing-system-3b7d7-default-rtdb.firebaseio.com/users.json",
+      user
+    );
+    const fetchedUser: UserType = {
+      ...user,
+      id: response.data,
+    };
+    return fetchedUser;
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async (user: UserType) => {
+    const response = await axios.put(
+      `https://queuing-system-3b7d7-default-rtdb.firebaseio.com/users/${user.id}.json`,
+      user
+    );
+    const fetchedUser: UserType = {
+      ...user,
+      id: response.data,
+    };
+    return fetchedUser;
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -85,6 +116,16 @@ const userSlice = createSlice({
       .addCase(getUserById.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Failed to fetch users";
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateUser.fulfilled, (state) => {
+        state.status = "idle";
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Failed to update user";
       });
   },
 });

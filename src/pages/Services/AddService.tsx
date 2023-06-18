@@ -7,20 +7,39 @@ import {
   Input,
   Row,
   Space,
+  Spin,
   Typography,
 } from "antd";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/store";
+import { ServiceType, createService } from "../../store/reducer/serviceReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const AddService = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-  };
+  const dispatch = useAppDispatch();
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const onFinish = (value: ServiceType) => {
+    setLoading(true);
+    const service = {
+      ...value,
+      activeStatus: true,
+    };
+    dispatch(createService(service))
+      .then(unwrapResult)
+      .then(() => {
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const onCancel = (event: any) => {
@@ -35,11 +54,7 @@ const AddService = () => {
           <Title level={2} className="text-orange">
             Quản lý dịch vụ
           </Title>
-          <Form
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            layout="vertical"
-          >
+          <Form onFinish={onFinish} layout="vertical">
             <Card>
               <Title level={3} className="text-orange">
                 Thông tin dịch vụ
@@ -48,7 +63,7 @@ const AddService = () => {
                 <Col span={12}>
                   <Form.Item
                     label="Mã dịch vụ:"
-                    name="code"
+                    name="serviceCode"
                     rules={[
                       {
                         required: true,
@@ -60,7 +75,7 @@ const AddService = () => {
                   </Form.Item>
                   <Form.Item
                     label="Tên dịch vụ:"
-                    name="name"
+                    name="serviceName"
                     rules={[
                       {
                         required: true,
@@ -124,7 +139,7 @@ const AddService = () => {
                   Hủy bỏ
                 </Button>
                 <Button htmlType="submit" className="submit-button">
-                  Thêm dịch vụ
+                  {loading ? <Spin /> : "Thêm dịch vụ"}
                 </Button>
               </Space>
             </Form.Item>

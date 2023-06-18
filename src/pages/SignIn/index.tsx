@@ -32,6 +32,8 @@ const SignIn = () => {
       () => setLoading(false)
     );
 
+    localStorage.setItem("user", JSON.stringify(value));
+
     setTimeout(() => {
       navigate("/dashboard");
     }, 500);

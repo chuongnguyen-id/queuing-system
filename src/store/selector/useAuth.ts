@@ -27,41 +27,6 @@ const useAuth = () => {
   const dispatch = useAppDispatch();
   const AuthState = useAppSelector((state) => state.auth);
 
-  const signup = async (data: SignUpData, onError: () => void) => {
-    try {
-      const res = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      if (res.user) {
-        const userData: any = {
-          email: res.user.email,
-          username: res.user.email?.slice(0, res.user.email.indexOf("@")),
-          password: data.password,
-          uid: res.user.uid,
-          fullname: data.fullname,
-          phoneNumber: data.phoneNumber,
-          role: data.role,
-          activeStatus: data.activeStatus,
-        };
-        await axios.post(
-          `https://queuing-system-3b7d7-default-rtdb.firebaseio.com/users.json`,
-          userData
-        );
-        dispatch(needVerify());
-        if (!AuthState.needVerification) {
-          await sendEmailVerification(res!.user);
-        }
-
-        return dispatch(login(userData));
-      }
-    } catch (err: any) {
-      onError();
-      dispatch(setError(err?.message));
-    }
-  };
-
   const setLoadingIn = (value: boolean) => {
     return dispatch(() => {
       setLoading(value);
@@ -130,6 +95,48 @@ const useAuth = () => {
     if (!oobCode && !newPassword) return;
 
     return await confirmPasswordReset(auth, oobCode, newPassword);
+  };
+
+  const signup = async (data: SignUpData, onError: () => void) => {
+    try {
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      if (res.user) {
+        const userData: any = {
+          email: res.user.email,
+          username: res.user.email?.slice(0, res.user.email.indexOf("@")),
+          password: data.password,
+          uid: res.user.uid,
+          fullname: data.fullname,
+          phoneNumber: data.phoneNumber,
+          role: data.role,
+          activeStatus: data.activeStatus,
+        };
+        await axios.post(
+          `https://queuing-system-3b7d7-default-rtdb.firebaseio.com/users.json`,
+          userData
+        );
+
+        // dispatch(needVerify());
+        // if (!AuthState.needVerification) {
+        //   await sendEmailVerification(res!.user);
+        // }
+        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+        await signInWithEmailAndPassword(
+          auth,
+          currentUser.username + "@gmail.com",
+          currentUser.password
+        );
+
+        return dispatch(setSuccess("Sign up complete"));
+      }
+    } catch (err: any) {
+      onError();
+      dispatch(setError(err?.message));
+    }
   };
 
   return {

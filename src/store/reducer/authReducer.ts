@@ -12,7 +12,6 @@ interface AuthState {
 
 export interface SignUpData {
   [x: string]: any;
-  displayName: string;
   email: string;
   password: string;
 }

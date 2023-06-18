@@ -4,6 +4,7 @@ import authReducer from "./reducer/authReducer";
 import profileReducer from "./reducer/profileReducer";
 import userReducer from "./reducer/userReducer";
 import deviceReducer from "./reducer/deviceReducer";
+import serviceReducer from "./reducer/serviceReducer";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     profile: profileReducer,
     user: userReducer,
     device: deviceReducer,
+    service: serviceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

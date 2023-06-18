@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Col, Input, Row, Select, Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -13,94 +14,99 @@ import { DeviceType, getDevice } from "../../store/reducer/deviceReducer";
 import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
 
-const columns: ColumnsType<DeviceType> = [
-  {
-    title: "Mã thiết bị",
-    dataIndex: "deviceCode",
-    key: "deviceCode",
-  },
-  {
-    title: "Tên thiết bị",
-    dataIndex: "deviceName",
-    key: "deviceName",
-  },
-  {
-    title: "Địa chỉ IP",
-    dataIndex: "ipAddress",
-    key: "ipAddress",
-  },
-  {
-    title: "Trạng thái hoạt động",
-    dataIndex: "activeStatus",
-    key: "activeStatus",
-    render: (activeStatus) => {
-      const color = activeStatus ? "#34CD26" : "#EC3740";
-      const text = activeStatus ? "Hoạt động" : "Ngưng hoạt động";
-      return (
-        <div>
-          <span style={{ color: color }}>●&nbsp;</span>
-          {text}
-        </div>
-      );
-    },
-  },
-  {
-    title: "Trạng thái kết nối",
-    dataIndex: "connectionStatus",
-    key: "connectionStatus",
-    render: (activeStatus) => {
-      const color = activeStatus ? "#34CD26" : "#EC3740";
-      const text = activeStatus ? "Kết nối" : "Mất kết nối";
-      return (
-        <div>
-          <span style={{ color: color }}>●&nbsp;</span>
-          {text}
-        </div>
-      );
-    },
-  },
-  {
-    title: "Dịch vụ sử dụng",
-    dataIndex: "usedService",
-    key: "usedService",
-    render: (usedService) => {
-      const link = `/thiet-bi/danh-sach-thiet-bi/chi-tiet`;
-      const services = usedService.join(", ");
-      return (
-        <div>
-          {services.length > 20 ? services.slice(0, 20) + "..." : services}
-          <div>
-            <a href={link}>Xem thêm</a>
-          </div>
-        </div>
-      );
-    },
-  },
-  {
-    title: " ",
-    key: "detail",
-    align: "center",
-    render: (record) => (
-      <a href={`/thiet-bi/danh-sach-thiet-bi/chi-tiet/${record.id}`}>
-        Chi tiết
-      </a>
-    ),
-  },
-  {
-    title: " ",
-    key: "update",
-    align: "center",
-    render: (record) => (
-      <a href={`/thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat/${record.id}`}>
-        Cập nhật
-      </a>
-    ),
-  },
-];
-
 const Devices = () => {
   const { Title } = Typography;
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+
+  const columns: ColumnsType<DeviceType> = [
+    {
+      title: "Mã thiết bị",
+      dataIndex: "deviceCode",
+      key: "deviceCode",
+    },
+    {
+      title: "Tên thiết bị",
+      dataIndex: "deviceName",
+      key: "deviceName",
+    },
+    {
+      title: "Địa chỉ IP",
+      dataIndex: "ipAddress",
+      key: "ipAddress",
+    },
+    {
+      title: "Trạng thái hoạt động",
+      dataIndex: "activeStatus",
+      key: "activeStatus",
+      render: (activeStatus) => {
+        const color = activeStatus ? "#34CD26" : "#EC3740";
+        const text = activeStatus ? "Hoạt động" : "Ngưng hoạt động";
+        return (
+          <div>
+            <span style={{ color: color }}>●&nbsp;</span>
+            {text}
+          </div>
+        );
+      },
+    },
+    {
+      title: "Trạng thái kết nối",
+      dataIndex: "connectionStatus",
+      key: "connectionStatus",
+      render: (activeStatus) => {
+        const color = activeStatus ? "#34CD26" : "#EC3740";
+        const text = activeStatus ? "Kết nối" : "Mất kết nối";
+        return (
+          <div>
+            <span style={{ color: color }}>●&nbsp;</span>
+            {text}
+          </div>
+        );
+      },
+    },
+    {
+      title: "Dịch vụ sử dụng",
+      dataIndex: "usedService",
+      key: "usedService",
+      width: "250px",
+      render: (usedService) => {
+        const services = usedService.join(", ");
+        const toggleExpanded = () => {
+          setExpanded(!expanded);
+        };
+
+        return (
+          <div>
+            {expanded ? services : services.slice(0, 20) + "..."}
+            <div>
+              <a onClick={toggleExpanded}>{expanded ? "Ẩn" : "Xem thêm"}</a>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      title: " ",
+      key: "detail",
+      align: "center",
+      render: (record) => (
+        <a href={`/thiet-bi/danh-sach-thiet-bi/chi-tiet/${record.id}`}>
+          Chi tiết
+        </a>
+      ),
+    },
+    {
+      title: " ",
+      key: "update",
+      align: "center",
+      render: (record) => (
+        <a href={`/thiet-bi/danh-sach-thiet-bi/chi-tiet/cap-nhat/${record.id}`}>
+          Cập nhật
+        </a>
+      ),
+    },
+  ];
 
   const dispatch = useAppDispatch();
   const data = useSelector((state: any) => state.device.devices);
@@ -199,7 +205,7 @@ const Devices = () => {
             </Link>
           </Button>
           <Table
-            key={filteredData.map((item: any) => item.id).join(",")}
+            key={filteredData.map((item: any) => item.id)}
             columns={columns}
             dataSource={filteredData}
             loading={loading}

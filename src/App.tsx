@@ -64,11 +64,11 @@ function App() {
               element={<AddService />}
             />
             <Route
-              path="dich-vu/danh-sach-dich-vu/chi-tiet"
+              path="dich-vu/danh-sach-dich-vu/chi-tiet/:id"
               element={<ServiceInfo />}
             />
             <Route
-              path="dich-vu/danh-sach-dich-vu/chi-tiet/cap-nhat"
+              path="dich-vu/danh-sach-dich-vu/chi-tiet/cap-nhat/:id"
               element={<EditService />}
             />
 
