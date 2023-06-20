@@ -18,6 +18,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAuth from "../../../store/selector/useAuth";
+import { useAppDispatch } from "../../../store/store";
+import { useSelector } from "react-redux";
+import { createLog } from "../../../store/reducer/logReducer";
 
 const AddAccount = () => {
   const { Title } = Typography;
@@ -27,6 +30,9 @@ const AddAccount = () => {
 
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
+
+  const dispatch = useAppDispatch();
+  const userData = useSelector((state: any) => state.profile.users[0]);
 
   useEffect(() => {
     return () => {
@@ -42,6 +48,13 @@ const AddAccount = () => {
     }
     setLoading(true);
     await signup(value, () => setLoading(false));
+
+    const log = {
+      username: userData.username,
+      operation: `Tạo mới tài khoản ${username}`,
+    };
+    dispatch(createLog(log));
+
     setTimeout(() => {
       navigate(-1);
     }, 500);

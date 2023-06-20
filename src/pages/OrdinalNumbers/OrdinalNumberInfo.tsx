@@ -1,10 +1,28 @@
 import { Button, Card, Descriptions, Typography } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { back } from "../../components/icon/icon";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "../../store/store";
+import { useSelector } from "react-redux";
+import { getOrdinalNumberById } from "../../store/reducer/ordinalNumberReducer";
+import moment from "moment";
 
-const DeviceInfo = () => {
+const OrdinalNumberInfo = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+
+  const dispatch = useAppDispatch();
+  const data = useSelector(
+    (state: any) => state.ordinalNumber.ordinalNumbers[0]
+  );
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getOrdinalNumberById(id)).finally(() => setLoading(false));
+    }
+  }, [dispatch, id]);
 
   const onCancel = (event: any) => {
     event.preventDefault();
@@ -26,28 +44,36 @@ const DeviceInfo = () => {
             <Title level={3} className="text-orange">
               Thông tin cấp số
             </Title>
-            <Descriptions column={2}>
-              <Descriptions.Item label="Họ tên">
-                Nguyễn Thị Dung
-              </Descriptions.Item>
-              <Descriptions.Item label="Nguồn cấp">Kiosk</Descriptions.Item>
-              <Descriptions.Item label="Tên dịch vụ">
-                Khám tim mạch
-              </Descriptions.Item>
-              <Descriptions.Item label="Trạng thái">Đang chờ</Descriptions.Item>
-              <Descriptions.Item label="Số điện thoại">
-                0948523623
-              </Descriptions.Item>
-              <Descriptions.Item label="Thời gian cấp:">
-                14:35 - 07/11/2021
-              </Descriptions.Item>
-              <Descriptions.Item label="Địa chỉ Email:">
-                nguyendung@gmail.com
-              </Descriptions.Item>
-              <Descriptions.Item label="Hạn sử dụng">
-                18:00 - 07/11/2021
-              </Descriptions.Item>
-            </Descriptions>
+            {loading ? (
+              <div>Đang tải...</div>
+            ) : (
+              <Descriptions column={2}>
+                <Descriptions.Item label="Họ tên">
+                  {data.fullname}
+                </Descriptions.Item>
+                <Descriptions.Item label="Nguồn cấp">
+                  {data.source}
+                </Descriptions.Item>
+                <Descriptions.Item label="Tên dịch vụ">
+                  {data.service}
+                </Descriptions.Item>
+                <Descriptions.Item label="Trạng thái">
+                  {data.dateStatus}
+                </Descriptions.Item>
+                <Descriptions.Item label="Số điện thoại">
+                  {data.phoneNumber}
+                </Descriptions.Item>
+                <Descriptions.Item label="Thời gian cấp:">
+                  {moment(data.issueDate).format("HH:mm - DD/MM/YYYY")}
+                </Descriptions.Item>
+                <Descriptions.Item label="Địa chỉ Email:">
+                  {data.email}
+                </Descriptions.Item>
+                <Descriptions.Item label="Hạn sử dụng">
+                  {moment(data.expirationDate).format("HH:mm - DD/MM/YYYY")}
+                </Descriptions.Item>
+              </Descriptions>
+            )}
           </Card>
         </div>
       </div>
@@ -55,4 +81,4 @@ const DeviceInfo = () => {
   );
 };
 
-export default DeviceInfo;
+export default OrdinalNumberInfo;

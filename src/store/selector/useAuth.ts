@@ -124,12 +124,12 @@ const useAuth = () => {
         // if (!AuthState.needVerification) {
         //   await sendEmailVerification(res!.user);
         // }
-        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-        await signInWithEmailAndPassword(
-          auth,
-          currentUser.username + "@gmail.com",
-          currentUser.password
-        );
+        // const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+        // await signInWithEmailAndPassword(
+        //   auth,
+        //   currentUser.username + "@gmail.com",
+        //   currentUser.password
+        // );
 
         return dispatch(setSuccess("Sign up complete"));
       }

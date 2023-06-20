@@ -20,6 +20,7 @@ import {
   updateService,
 } from "../../store/reducer/serviceReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { createLog } from "../../store/reducer/logReducer";
 
 const EditService = () => {
   const { Title } = Typography;
@@ -29,6 +30,7 @@ const EditService = () => {
 
   const dispatch = useAppDispatch();
   const data = useSelector((state: any) => state.service.services[0]);
+  const userData = useSelector((state: any) => state.profile.users[0]);
 
   useEffect(() => {
     if (id) {
@@ -41,6 +43,11 @@ const EditService = () => {
     dispatch(updateService({ ...value, id: id }))
       .then(unwrapResult)
       .then(() => {
+        const log = {
+          username: userData.username,
+          operation: `Cập nhật thông tin dịch vụ ${value.serviceName}`,
+        };
+        dispatch(createLog(log));
         navigate(-1);
       })
       .catch((error) => {

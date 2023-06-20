@@ -75,8 +75,7 @@ const AccountManagement = () => {
 
   useEffect(() => {
     dispatch(getUser()).finally(() => setLoading(false));
-    setFilteredData(data);
-  }, [dispatch, data]);
+  }, [dispatch]);
 
   const handleSearch = (searchText: string) => {
     const newData = _.filter(data, (item) => {

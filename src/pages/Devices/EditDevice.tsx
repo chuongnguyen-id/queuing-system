@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../store/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
+import { createLog } from "../../store/reducer/logReducer";
 
 const EditDevice = () => {
   const { Title } = Typography;
@@ -34,6 +35,7 @@ const EditDevice = () => {
 
   const dispatch = useAppDispatch();
   const data = useSelector((state: any) => state.device.devices[0]);
+  const userData = useSelector((state: any) => state.profile.users[0]);
 
   useEffect(() => {
     if (id) {
@@ -46,6 +48,11 @@ const EditDevice = () => {
     dispatch(updateDevice({ ...value, id: id }))
       .then(unwrapResult)
       .then(() => {
+        const log = {
+          username: userData.username,
+          operation: `Cập nhật thông tin thiết bị ${value.deviceName}`,
+        };
+        dispatch(createLog(log));
         navigate(-1);
       })
       .catch((error) => {

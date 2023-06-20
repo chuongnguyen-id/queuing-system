@@ -5,6 +5,9 @@ import profileReducer from "./reducer/profileReducer";
 import userReducer from "./reducer/userReducer";
 import deviceReducer from "./reducer/deviceReducer";
 import serviceReducer from "./reducer/serviceReducer";
+import ordinalNumberReducer from "./reducer/ordinalNumberReducer";
+import roleReducer from "./reducer/roleReducer";
+import logReducer from "./reducer/logReducer";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +16,9 @@ export const store = configureStore({
     user: userReducer,
     device: deviceReducer,
     service: serviceReducer,
+    ordinalNumber: ordinalNumberReducer,
+    role: roleReducer,
+    log: logReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

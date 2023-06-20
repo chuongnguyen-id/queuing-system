@@ -70,7 +70,7 @@ export const statusSelect = [
   },
 ];
 
-export const processingStatusSelect = [
+export const dateStatusSelect = [
   {
     value: "Tất cả",
   },
@@ -78,7 +78,7 @@ export const processingStatusSelect = [
     value: "Đang chờ",
   },
   {
-    value: "Đang sử dụng",
+    value: "Đã sử dụng",
   },
   {
     value: "Bỏ qua",

@@ -53,6 +53,7 @@ function Sidenav() {
 
   const navigate = useNavigate();
   const logOut = () => {
+    localStorage.removeItem("user");
     signout();
     navigate("/dang-nhap");
   };

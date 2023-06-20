@@ -20,6 +20,8 @@ import {
 } from "../../components/configs/SelectConfigs";
 import { DeviceType, createDevice } from "../../store/reducer/deviceReducer";
 import { useAppDispatch } from "../../store/store";
+import { createLog } from "../../store/reducer/logReducer";
+import { useSelector } from "react-redux";
 
 const AddDevice = () => {
   const { Title } = Typography;
@@ -27,6 +29,7 @@ const AddDevice = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useAppDispatch();
+  const userData = useSelector((state: any) => state.profile.users[0]);
 
   const onFinish = (value: DeviceType) => {
     setLoading(true);
@@ -38,6 +41,11 @@ const AddDevice = () => {
     dispatch(createDevice(device))
       .then(unwrapResult)
       .then(() => {
+        const log = {
+          username: userData.username,
+          operation: `Thêm thông tin thiết bị ${value.deviceName}`,
+        };
+        dispatch(createLog(log));
         navigate(-1);
       })
       .catch((error) => {

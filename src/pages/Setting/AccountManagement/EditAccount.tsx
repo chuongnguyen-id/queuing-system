@@ -25,6 +25,7 @@ import {
   updateUser,
 } from "../../../store/reducer/userReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { createLog } from "../../../store/reducer/logReducer";
 
 const EditAccount = () => {
   const { Title } = Typography;
@@ -34,6 +35,7 @@ const EditAccount = () => {
 
   const dispatch = useAppDispatch();
   const data = useSelector((state: any) => state.user.users[0]);
+  const userData = useSelector((state: any) => state.profile.users[0]);
 
   useEffect(() => {
     if (id) {
@@ -46,6 +48,11 @@ const EditAccount = () => {
     dispatch(updateUser({ ...value, id: id }))
       .then(unwrapResult)
       .then(() => {
+        const log = {
+          username: userData.username,
+          operation: `Cập nhật thông tin tài khoản ${value.username}`,
+        };
+        dispatch(createLog(log));
         navigate(-1);
       })
       .catch((error) => {

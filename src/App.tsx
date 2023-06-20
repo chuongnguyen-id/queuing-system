@@ -82,7 +82,7 @@ function App() {
               element={<AddOrdinalNumber />}
             />
             <Route
-              path="cap-so/danh-sach-cap-so/chi-tiet"
+              path="cap-so/danh-sach-cap-so/chi-tiet/:id"
               element={<OrdinalNumberInfo />}
             />
 
@@ -100,7 +100,7 @@ function App() {
               element={<AddRole />}
             />
             <Route
-              path="cai-dat-he-thong/quan-ly-vai-tro/cap-nhat-vai-tro"
+              path="cai-dat-he-thong/quan-ly-vai-tro/cap-nhat-vai-tro/:id"
               element={<EditRole />}
             />
             {/* Account */}

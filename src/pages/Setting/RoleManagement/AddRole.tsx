@@ -7,36 +7,56 @@ import {
   Input,
   Row,
   Space,
+  Spin,
   Typography,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import type { CheckboxValueType } from "antd/es/checkbox/Group";
+import { useAppDispatch } from "../../../store/store";
+import { RoleType, createRole } from "../../../store/reducer/roleReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { createLog } from "../../../store/reducer/logReducer";
+import { useSelector } from "react-redux";
 
 const AddRoleManagement = () => {
   const { Title } = Typography;
   const CheckboxGroup = Checkbox.Group;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const userData = useSelector((state: any) => state.profile.users[0]);
+
+  const onFinish = (value: RoleType) => {
+    setLoading(true);
+    const role = {
+      ...value,
+    };
+    dispatch(createRole(role))
+      .then(unwrapResult)
+      .then(() => {
+        const log = {
+          username: userData.username,
+          operation: `Thêm thông tin vai trò ${value.roleName}`,
+        };
+        dispatch(createLog(log));
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const [checkedList, setCheckedList] = useState<CheckboxValueType[]>();
   const [indeterminate, setIndeterminate] = useState(true);
   const [checkAll, setCheckAll] = useState(false);
 
   const plainOptions = ["Chức năng x", "Chức năng y", "Chức năng z"];
-
-  const onFinish = (values: any) => {
-    console.log(values);
-    window.alert(JSON.stringify(values));
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
-  };
 
   // Check Box
   const onChange = (list: CheckboxValueType[]) => {
@@ -62,11 +82,7 @@ const AddRoleManagement = () => {
           <Title level={2} className="text-orange">
             Danh sách vai trò
           </Title>
-          <Form
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            layout="vertical"
-          >
+          <Form onFinish={onFinish} layout="vertical">
             <Card>
               <Title level={3} className="text-orange">
                 Thông tin vai trò
@@ -103,15 +119,7 @@ const AddRoleManagement = () => {
                         <Title level={3} className="text-orange">
                           Nhóm chức năng {group}
                         </Title>
-                        <Form.Item
-                          name={`group${group}`}
-                          rules={[
-                            {
-                              required: true,
-                              message: `Vui lòng chọn nhóm chức năng ${group}`,
-                            },
-                          ]}
-                        >
+                        <Form.Item name={`group${group}`}>
                           <Checkbox
                             indeterminate={indeterminate}
                             onChange={onCheckAllChange}
@@ -137,7 +145,7 @@ const AddRoleManagement = () => {
                   Hủy bỏ
                 </Button>
                 <Button htmlType="submit" className="submit-button">
-                  Thêm thiết bị
+                  {loading ? <Spin /> : "Thêm thiết bị"}
                 </Button>
               </Space>
             </Form.Item>

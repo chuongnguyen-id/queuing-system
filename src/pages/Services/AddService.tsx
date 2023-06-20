@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/store";
 import { ServiceType, createService } from "../../store/reducer/serviceReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { createLog } from "../../store/reducer/logReducer";
+import { useSelector } from "react-redux";
 
 const AddService = () => {
   const { Title } = Typography;
@@ -22,6 +24,7 @@ const AddService = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useAppDispatch();
+  const userData = useSelector((state: any) => state.profile.users[0]);
 
   const onFinish = (value: ServiceType) => {
     setLoading(true);
@@ -32,6 +35,11 @@ const AddService = () => {
     dispatch(createService(service))
       .then(unwrapResult)
       .then(() => {
+        const log = {
+          username: userData.username,
+          operation: `Thêm thông tin dịch vụ ${value.serviceName}`,
+        };
+        dispatch(createLog(log));
         navigate(-1);
       })
       .catch((error) => {

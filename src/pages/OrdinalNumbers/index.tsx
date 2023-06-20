@@ -10,7 +10,7 @@ import {
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
-  processingStatusSelect,
+  dateStatusSelect,
   serviceSelect,
   sourceSelect,
 } from "../../components/configs/SelectConfigs";
@@ -20,19 +20,14 @@ import { add, calendar } from "../../components/icon/icon";
 import { useEffect, useState } from "react";
 import _ from "lodash";
 import moment from "moment";
+import {
+  OrdinalNumberType,
+  getOrdinalNumber,
+} from "../../store/reducer/ordinalNumberReducer";
+import { useAppDispatch } from "../../store/store";
+import { useSelector } from "react-redux";
 
-interface DataType {
-  key: string;
-  stt: string;
-  name: string;
-  service: string;
-  issueDate: Date;
-  expirationDate: Date;
-  status: string;
-  source: string;
-}
-
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<OrdinalNumberType> = [
   {
     title: "STT",
     dataIndex: "stt",
@@ -40,8 +35,8 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Tên khách hàng",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "fullname",
+    key: "fullname",
   },
   {
     title: "Tên dịch vụ",
@@ -62,19 +57,19 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Trạng thái",
-    dataIndex: "status",
-    key: "status",
-    render: (status) => {
+    dataIndex: "dateStatus",
+    key: "dateStatus",
+    render: (dateStatus) => {
       const color =
-        status === "Đang chờ"
+        dateStatus === "Đang chờ"
           ? "#4277FF"
-          : status === "Đã sử dụng"
+          : dateStatus === "Đã sử dụng"
           ? "#7E7D88"
           : "#E73F3F";
       return (
         <div>
           <span style={{ color: color }}>●&nbsp;</span>
-          {status}
+          {dateStatus}
         </div>
       );
     },
@@ -88,40 +83,9 @@ const columns: ColumnsType<DataType> = [
     title: " ",
     key: "detail",
     align: "center",
-    render: () => <a href={"/cap-so/danh-sach-cap-so/chi-tiet"}>Chi tiết</a>,
-  },
-];
-
-const data: DataType[] = [
-  {
-    key: "1",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    service: "Khám tim mạch",
-    issueDate: new Date("2023/05/01 15:56"),
-    expirationDate: new Date("2023/05/05 15:56"),
-    status: "Đang chờ",
-    source: "Kiosk",
-  },
-  {
-    key: "2",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    service: "Khám tổng quát",
-    issueDate: new Date("2023/05/06 15:56"),
-    expirationDate: new Date("2023/05/10 15:56"),
-    status: "Đang chờ",
-    source: "Hệ thống",
-  },
-  {
-    key: "3",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    service: "Khám tim mạch",
-    issueDate: new Date("2023/05/10 15:56"),
-    expirationDate: new Date("2023/05/15 15:56"),
-    status: "Đang chờ",
-    source: "Kiosk",
+    render: (record) => (
+      <a href={`/cap-so/danh-sach-cap-so/chi-tiet/${record.id}`}>Chi tiết</a>
+    ),
   },
 ];
 
@@ -129,35 +93,48 @@ const OrdinalNumbers = () => {
   const { Title } = Typography;
   const { RangePicker } = DatePicker;
 
+  const dispatch = useAppDispatch();
+  const data = useSelector((state: any) => state.ordinalNumber.ordinalNumbers);
   const [filteredData, setFilteredData] = useState(data);
+  const [loading, setLoading] = useState(true);
   const [selectedDateRange, setSelectedDateRange] = useState(undefined);
 
+  useEffect(() => {
+    dispatch(getOrdinalNumber()).finally(() => setLoading(false));
+  }, [dispatch]);
+
   const handleService = (value: string) => {
-    let filteredData: DataType[] = [];
+    let filteredData: OrdinalNumberType[] = [];
     if (value === "Tất cả") {
       filteredData = data;
     } else {
-      filteredData = data.filter((item) => item.service === value);
+      filteredData = data.filter(
+        (item: { service: string }) => item.service === value
+      );
     }
     setFilteredData(filteredData);
   };
 
   const handleStatus = (value: string) => {
-    let filteredData: DataType[] = [];
+    let filteredData: OrdinalNumberType[] = [];
     if (value === "Tất cả") {
       filteredData = data;
     } else {
-      filteredData = data.filter((item) => item.status === value);
+      filteredData = data.filter(
+        (item: { dateStatus: string }) => item.dateStatus === value
+      );
     }
     setFilteredData(filteredData);
   };
 
   const handleSource = (value: string) => {
-    let filteredData: DataType[] = [];
+    let filteredData: OrdinalNumberType[] = [];
     if (value === "Tất cả") {
       filteredData = data;
     } else {
-      filteredData = data.filter((item) => item.source === value);
+      filteredData = data.filter(
+        (item: { source: string }) => item.source === value
+      );
     }
     setFilteredData(filteredData);
   };
@@ -165,7 +142,7 @@ const OrdinalNumbers = () => {
   const handleSearch = (searchText: string) => {
     const newData = _.filter(data, (item) => {
       return _.includes(
-        (item.stt + item.name + item.service + item.source).toLowerCase(),
+        (item.fullname + item.service + item.source).toLowerCase(),
         searchText.toLowerCase()
       );
     });
@@ -176,7 +153,10 @@ const OrdinalNumbers = () => {
   const handleRangeChange = (dates: any, dateStrings: [string, string]) => {
     setSelectedDateRange(dates);
     const filtered = data.filter(
-      (item) =>
+      (item: {
+        issueDate: moment.MomentInput;
+        expirationDate: moment.MomentInput;
+      }) =>
         moment(item.issueDate).isBetween(dateStrings[0], dateStrings[1]) &&
         moment(item.expirationDate).isBetween(dateStrings[0], dateStrings[1])
     );
@@ -187,7 +167,7 @@ const OrdinalNumbers = () => {
     if (!selectedDateRange) {
       setFilteredData(data);
     }
-  }, [selectedDateRange]);
+  }, [data, selectedDateRange]);
 
   return (
     <>
@@ -214,7 +194,7 @@ const OrdinalNumbers = () => {
                 size="large"
                 onChange={handleStatus}
                 suffixIcon={<CaretDownOutlined />}
-                options={processingStatusSelect}
+                options={dateStatusSelect}
               />
             </Col>
             <Col span={4}>
@@ -252,7 +232,12 @@ const OrdinalNumbers = () => {
               <div>Cấp số mới</div>
             </Link>
           </Button>
-          <Table columns={columns} dataSource={filteredData} bordered />
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+            loading={loading}
+            bordered
+          />
         </div>
       </div>
     </>

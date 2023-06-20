@@ -4,17 +4,14 @@ import { Link } from "react-router-dom";
 import { download, calendar } from "../../components/icon/icon";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { useAppDispatch } from "../../store/store";
+import { useSelector } from "react-redux";
+import {
+  OrdinalNumberType,
+  getOrdinalNumber,
+} from "../../store/reducer/ordinalNumberReducer";
 
-interface DataType {
-  key: string;
-  stt: string;
-  name: string;
-  issueDate: Date;
-  status: string;
-  source: string;
-}
-
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<OrdinalNumberType> = [
   {
     title: "STT",
     dataIndex: "stt",
@@ -22,8 +19,8 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Tên khách hàng",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "fullname",
+    key: "fullname",
   },
   {
     title: "Thời gian cấp",
@@ -33,19 +30,19 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Trạng thái",
-    dataIndex: "status",
-    key: "status",
-    render: (status) => {
+    dataIndex: "dateStatus",
+    key: "dateStatus",
+    render: (dateStatus) => {
       const color =
-        status === "Đang chờ"
+        dateStatus === "Đang chờ"
           ? "#4277FF"
-          : status === "Đã sử dụng"
+          : dateStatus === "Đã sử dụng"
           ? "#7E7D88"
           : "#E73F3F";
       return (
         <div>
           <span style={{ color: color }}>●&nbsp;</span>
-          {status}
+          {dateStatus}
         </div>
       );
     },
@@ -56,59 +53,64 @@ const columns: ColumnsType<DataType> = [
     key: "source",
   },
 ];
-
-const data: DataType[] = [
-  {
-    key: "1",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    issueDate: new Date("2023/05/01 15:56"),
-    status: "Đang chờ",
-    source: "Kiosk",
-  },
-  {
-    key: "2",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    issueDate: new Date("2023/05/06 15:56"),
-    status: "Đang chờ",
-    source: "Hệ thống",
-  },
-  {
-    key: "3",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    issueDate: new Date("2023/05/10 15:56"),
-    status: "Đã sử dụng",
-    source: "Kiosk",
-  },
-  {
-    key: "4",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    issueDate: new Date("2023/05/10 15:56"),
-    status: "Bỏ qua",
-    source: "Kiosk",
-  },
-  {
-    key: "5",
-    stt: "2010001",
-    name: "Lê Huỳnh Ái Vân",
-    issueDate: new Date("2023/05/10 15:56"),
-    status: "Đã sử dụng",
-    source: "Kiosk",
-  },
-];
+//   {
+//     key: "1",
+//     stt: "2010001",
+//     name: "Lê Huỳnh Ái Vân",
+//     issueDate: new Date("2023/05/01 15:56"),
+//     status: "Đang chờ",
+//     source: "Kiosk",
+//   },
+//   {
+//     key: "2",
+//     stt: "2010001",
+//     name: "Lê Huỳnh Ái Vân",
+//     issueDate: new Date("2023/05/06 15:56"),
+//     status: "Đang chờ",
+//     source: "Hệ thống",
+//   },
+//   {
+//     key: "3",
+//     stt: "2010001",
+//     name: "Lê Huỳnh Ái Vân",
+//     issueDate: new Date("2023/05/10 15:56"),
+//     status: "Đã sử dụng",
+//     source: "Kiosk",
+//   },
+//   {
+//     key: "4",
+//     stt: "2010001",
+//     name: "Lê Huỳnh Ái Vân",
+//     issueDate: new Date("2023/05/10 15:56"),
+//     status: "Bỏ qua",
+//     source: "Kiosk",
+//   },
+//   {
+//     key: "5",
+//     stt: "2010001",
+//     name: "Lê Huỳnh Ái Vân",
+//     issueDate: new Date("2023/05/10 15:56"),
+//     status: "Đã sử dụng",
+//     source: "Kiosk",
+//   },
+// ];
 
 const Reports = () => {
   const { RangePicker } = DatePicker;
 
+  const dispatch = useAppDispatch();
+  const data = useSelector((state: any) => state.ordinalNumber.ordinalNumbers);
   const [filteredData, setFilteredData] = useState(data);
+  const [loading, setLoading] = useState(true);
   const [selectedDateRange, setSelectedDateRange] = useState(undefined);
+
+  useEffect(() => {
+    dispatch(getOrdinalNumber()).finally(() => setLoading(false));
+  }, [dispatch]);
 
   const handleRangeChange = (dates: any, dateStrings: [string, string]) => {
     setSelectedDateRange(dates);
-    const filtered = data.filter((item) =>
+    const filtered = data.filter((item: { issueDate: moment.MomentInput }) =>
       moment(item.issueDate).isBetween(dateStrings[0], dateStrings[1])
     );
     setFilteredData(filtered);
@@ -118,7 +120,7 @@ const Reports = () => {
     if (!selectedDateRange) {
       setFilteredData(data);
     }
-  }, [selectedDateRange]);
+  }, [data, selectedDateRange]);
 
   return (
     <>
@@ -140,7 +142,12 @@ const Reports = () => {
               <div>Tải về</div>
             </Link>
           </Button>
-          <Table columns={columns} dataSource={filteredData} bordered />
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+            loading={loading}
+            bordered
+          />
         </div>
       </div>
     </>

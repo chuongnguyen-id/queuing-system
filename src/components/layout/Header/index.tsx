@@ -8,7 +8,11 @@ import profile from "../../../assets/images/avatar.png";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 import { useAppDispatch } from "../../../store/store";
 import { useSelector } from "react-redux";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { getProfile } from "../../../store/reducer/profileReducer";
 
 const bell = [
@@ -225,9 +229,18 @@ const Header = () => {
 
   const dispatch = useAppDispatch();
   const data = useSelector((state: any) => state.profile.users[0]);
+  const auth = getAuth();
 
   useEffect(() => {
-    const auth = getAuth();
+    const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+    if (currentUser.username && currentUser.password) {
+      signInWithEmailAndPassword(
+        auth,
+        currentUser.username + "@gmail.com",
+        currentUser.password
+      );
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(getProfile(user.uid)).finally(() => setLoading(false));
@@ -236,6 +249,7 @@ const Header = () => {
 
     if (data) {
       setFullname(data.fullname);
+      setLoading(false);
     }
   }, [dispatch]);
 

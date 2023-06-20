@@ -98,8 +98,7 @@ const Services = () => {
 
   useEffect(() => {
     dispatch(getService()).finally(() => setLoading(false));
-    setFilteredData(data);
-  }, [dispatch, data]);
+  }, [dispatch]);
 
   const handleActiveStatus = (value: string) => {
     let filteredData: ServiceType[] = [];
@@ -117,7 +116,7 @@ const Services = () => {
   const handleSearch = (searchText: string) => {
     const newData = _.filter(data, (item) => {
       return _.includes(
-        (item.code + item.name + item.description).toLowerCase(),
+        (item.serviceCode + item.serviceName + item.description).toLowerCase(),
         searchText.toLowerCase()
       );
     });

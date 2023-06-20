@@ -114,8 +114,7 @@ const Devices = () => {
 
   useEffect(() => {
     dispatch(getDevice()).finally(() => setLoading(false));
-    setFilteredData(data);
-  }, [dispatch, data]);
+  }, [dispatch]);
 
   const handleActiveStatus = (value: string) => {
     let filteredData: DeviceType[] = [];

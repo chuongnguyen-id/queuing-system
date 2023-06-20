@@ -1,23 +1,61 @@
-import { Button, Card, Form, Select, Space, Typography } from "antd";
+import { Button, Card, Form, Select, Space, Spin, Typography } from "antd";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { serviceSelect } from "../../components/configs/SelectConfigs";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import {
+  OrdinalNumberType,
+  createOrdinalNumber,
+} from "../../store/reducer/ordinalNumberReducer";
+import { useAppDispatch } from "../../store/store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { createLog } from "../../store/reducer/logReducer";
 
 const AddOrdinalNumber = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const onFinish = (values: any) => {
-    console.log(values);
-    window.alert(JSON.stringify(values));
-  };
+  const dispatch = useAppDispatch();
+  const data = useSelector((state: any) => state.profile.users[0]);
+  const userData = useSelector((state: any) => state.profile.users[0]);
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
+  const currentYear = new Date().getFullYear();
+  const randomNumber = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
 
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
+  const onFinish = (value: OrdinalNumberType) => {
+    setLoading(true);
+    const ordinalNumber = {
+      ...value,
+      stt: `${currentYear}${randomNumber}`,
+      userId: data.id,
+      fullname: data.fullname,
+      phoneNumber: data.phoneNumber,
+      email: data.email,
+      issueDate: new Date(),
+      expirationDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+      dateStatus: "Đang chờ",
+      source: "Kiosk",
+    };
+    dispatch(createOrdinalNumber(ordinalNumber))
+      .then(unwrapResult)
+      .then(() => {
+        const log = {
+          username: userData.username,
+          operation: `Cấp số thứ tự mới ${ordinalNumber.stt}`,
+        };
+        dispatch(createLog(log));
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const onCancel = () => {
@@ -38,24 +76,19 @@ const AddOrdinalNumber = () => {
             <Title level={5} className="text-gray wrapper-center">
               Dịch vụ khách hàng lựa chọn
             </Title>
-            <Form
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              layout="vertical"
-            >
+            <Form onFinish={onFinish} layout="vertical">
               <Form.Item
-                name="model"
+                name="service"
                 rules={[
                   {
                     required: true,
-                    message: "Vui lòng nhập loại thiết bị",
+                    message: "Vui lòng nhập loại dịch vụ",
                   },
                 ]}
               >
                 <Select
                   size="large"
                   placeholder="Chọn loại thiết bị"
-                  // onChange={handleChange}
                   suffixIcon={<CaretDownOutlined />}
                   options={serviceSelect}
                 />
@@ -67,7 +100,7 @@ const AddOrdinalNumber = () => {
                     Hủy bỏ
                   </Button>
                   <Button htmlType="submit" className="submit-button">
-                    In số
+                    {loading ? <Spin /> : "In số"}
                   </Button>
                 </Space>
               </Form.Item>
