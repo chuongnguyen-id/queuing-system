@@ -14,6 +14,8 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { getProfile } from "../../../store/reducer/profileReducer";
+import { getLog } from "../../../store/reducer/logReducer";
+import moment from "moment";
 
 const bell = [
   <svg
@@ -34,49 +36,6 @@ const bell = [
       fill="#FFAC6A"
     />
   </svg>,
-];
-
-const notification = [
-  {
-    title: "Nguyễn Thị Thùy Dung",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Nguyễn Thị Thùy Dung",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Võ Thị Kim Liên",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Hoàng Nguyễn Quốc Huy",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Võ Ngọc Lan Anh",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Nguyễn Thị Trúc Anh",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Nguyễn Trường Toản",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Phan Quốc Học",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Phan Thị Lệ",
-    description: "12h20 ngày 30/11/2021",
-  },
-  {
-    title: "Nguyễn Kim Kiều",
-    description: "12h20 ngày 30/11/2021",
-  },
 ];
 
 const routes = [
@@ -204,32 +163,20 @@ const routes = [
   },
 ];
 
-const menu = (
-  <List
-    className="header-notifications-dropdown"
-    itemLayout="horizontal"
-    dataSource={notification}
-    header={<div>Thông báo</div>}
-    renderItem={(item) => (
-      <List.Item>
-        <List.Item.Meta
-          title={`Người dùng: ${item.title}`}
-          description={`Thời gian nhận số: ${item.description}`}
-        />
-      </List.Item>
-    )}
-  />
-);
-
 const Header = () => {
   useEffect(() => window.scrollTo(0, 0));
   const breadcrumbs = useBreadcrumbs(routes, { disableDefaults: true });
   const [loading, setLoading] = useState(true);
-  const [fullname, setFullname] = useState("");
 
   const dispatch = useAppDispatch();
   const data = useSelector((state: any) => state.profile.users[0]);
+  const noticeData = useSelector((state: any) => state.log.logs);
   const auth = getAuth();
+
+  // Lọc ra hoạt động cấp số thứ tự
+  const newData = noticeData.filter((item: any) =>
+    /Cấp số thứ tự mới.*/.test(item.operation)
+  );
 
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
@@ -244,14 +191,33 @@ const Header = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(getProfile(user.uid)).finally(() => setLoading(false));
+        dispatch(getLog()).finally(() => setLoading(false));
       }
     });
 
     if (data) {
-      setFullname(data.fullname);
       setLoading(false);
     }
   }, [dispatch]);
+
+  const menu = (
+    <List
+      className="header-notifications-dropdown"
+      itemLayout="horizontal"
+      dataSource={newData}
+      header={<div>Thông báo</div>}
+      renderItem={(item: any) => (
+        <List.Item>
+          <List.Item.Meta
+            title={`Người dùng: ${item.fullname}`}
+            description={`Thời gian nhận số: ${moment(item.timestamp).format(
+              "HH:mm [ngày] DD/MM/YYYY"
+            )}`}
+          />
+        </List.Item>
+      )}
+    />
+  );
 
   return (
     <>
@@ -269,10 +235,10 @@ const Header = () => {
             <img src={profile} alt="" />
             <div>
               <div>Xin chào</div>
-              <div>{!loading && data ? fullname : <Spin />}</div>
+              <div>{!loading && data ? data.fullname : <Spin />}</div>
             </div>
           </Link>
-          <Badge size="small" count={notification.length}>
+          <Badge size="small" count={newData.length}>
             <Dropdown overlay={menu} trigger={["click"]}>
               <a
                 href="#pablo"

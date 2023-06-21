@@ -38,6 +38,7 @@ const AddRoleManagement = () => {
       .then(unwrapResult)
       .then(() => {
         const log = {
+          fullname: userData.fullname,
           username: userData.username,
           operation: `Thêm thông tin vai trò ${value.roleName}`,
         };

@@ -50,6 +50,7 @@ const AddAccount = () => {
     await signup(value, () => setLoading(false));
 
     const log = {
+      fullname: userData.fullname,
       username: userData.username,
       operation: `Tạo mới tài khoản ${username}`,
     };

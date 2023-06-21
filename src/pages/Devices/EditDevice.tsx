@@ -18,6 +18,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import {
   DeviceType,
+  getDevice,
   getDeviceById,
   updateDevice,
 } from "../../store/reducer/deviceReducer";
@@ -45,14 +46,21 @@ const EditDevice = () => {
 
   const onFinish = (value: DeviceType) => {
     setLoading(true);
-    dispatch(updateDevice({ ...value, id: id }))
+    const device = {
+      ...value,
+      activeStatus: true,
+      connectionStatus: true,
+    };
+    dispatch(updateDevice({ ...device, id: id }))
       .then(unwrapResult)
       .then(() => {
         const log = {
+          fullname: userData.fullname,
           username: userData.username,
           operation: `Cập nhật thông tin thiết bị ${value.deviceName}`,
         };
         dispatch(createLog(log));
+        dispatch(getDevice());
         navigate(-1);
       })
       .catch((error) => {

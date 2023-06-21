@@ -1,6 +1,5 @@
 import { Table, Col, Row, Button, DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { Link } from "react-router-dom";
 import { download, calendar } from "../../components/icon/icon";
 import { useEffect, useState } from "react";
 import moment from "moment";
@@ -137,10 +136,8 @@ const Reports = () => {
             </Col>
           </Row>
           <Button className="popup-button">
-            <Link to="/cap-so/danh-sach-cap-so/cap-so-moi">
-              <div>{download}</div>
-              <div>Tải về</div>
-            </Link>
+            <div>{download}</div>
+            <div>Tải về</div>
           </Button>
           <Table
             columns={columns}

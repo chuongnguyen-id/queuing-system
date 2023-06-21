@@ -11,6 +11,7 @@ import { useAppDispatch } from "../../store/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { createLog } from "../../store/reducer/logReducer";
+import modal from "antd/es/modal";
 
 const AddOrdinalNumber = () => {
   const { Title } = Typography;
@@ -21,13 +22,13 @@ const AddOrdinalNumber = () => {
   const data = useSelector((state: any) => state.profile.users[0]);
   const userData = useSelector((state: any) => state.profile.users[0]);
 
-  const currentYear = new Date().getFullYear();
-  const randomNumber = Math.floor(Math.random() * 1000)
-    .toString()
-    .padStart(3, "0");
-
   const onFinish = (value: OrdinalNumberType) => {
     setLoading(true);
+    const currentYear = new Date().getFullYear();
+    const randomNumber = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, "0");
+
     const ordinalNumber = {
       ...value,
       stt: `${currentYear}${randomNumber}`,
@@ -44,11 +45,12 @@ const AddOrdinalNumber = () => {
       .then(unwrapResult)
       .then(() => {
         const log = {
+          fullname: userData.fullname,
           username: userData.username,
           operation: `Cấp số thứ tự mới ${ordinalNumber.stt}`,
         };
         dispatch(createLog(log));
-        navigate(-1);
+        popupNotification(ordinalNumber);
       })
       .catch((error) => {
         console.error(error);
@@ -56,6 +58,32 @@ const AddOrdinalNumber = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const popupNotification = (value: any) => {
+    modal.info({
+      closable: true,
+      icon: null,
+      content: (
+        <div className="popup-notification">
+          <h1>Số thứ tự được cấp</h1>
+          <Title level={1} className="text-orange">
+            {value.stt}
+          </Title>
+          <h3>
+            DV: {value.service} <b>(tại quầy số 1)</b>
+          </h3>
+          <div className="footer-notification popup-notification">
+            <h2>Thời gian cấp: {value.issueDate.toLocaleDateString()}</h2>
+            <h2>Hạn sử dụng: {value.expirationDate.toLocaleDateString()}</h2>
+          </div>
+        </div>
+      ),
+      footer: null,
+      onCancel: () => {
+        navigate(-1);
+      },
+    });
   };
 
   const onCancel = () => {

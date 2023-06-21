@@ -36,6 +36,7 @@ const AddService = () => {
       .then(unwrapResult)
       .then(() => {
         const log = {
+          fullname: userData.fullname,
           username: userData.username,
           operation: `Thêm thông tin dịch vụ ${value.serviceName}`,
         };

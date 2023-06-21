@@ -42,6 +42,7 @@ const AddDevice = () => {
       .then(unwrapResult)
       .then(() => {
         const log = {
+          fullname: userData.fullname,
           username: userData.username,
           operation: `Thêm thông tin thiết bị ${value.deviceName}`,
         };

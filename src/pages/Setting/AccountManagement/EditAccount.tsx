@@ -21,6 +21,7 @@ import { useAppDispatch } from "../../../store/store";
 import { useSelector } from "react-redux";
 import {
   UserType,
+  getUser,
   getUserById,
   updateUser,
 } from "../../../store/reducer/userReducer";
@@ -49,10 +50,12 @@ const EditAccount = () => {
       .then(unwrapResult)
       .then(() => {
         const log = {
+          fullname: userData.fullname,
           username: userData.username,
           operation: `Cập nhật thông tin tài khoản ${value.username}`,
         };
         dispatch(createLog(log));
+        dispatch(getUser());
         navigate(-1);
       })
       .catch((error) => {

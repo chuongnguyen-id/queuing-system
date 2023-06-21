@@ -16,6 +16,7 @@ import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
 import {
   ServiceType,
+  getService,
   getServiceById,
   updateService,
 } from "../../store/reducer/serviceReducer";
@@ -40,14 +41,20 @@ const EditService = () => {
 
   const onFinish = (value: ServiceType) => {
     setLoading(true);
-    dispatch(updateService({ ...value, id: id }))
+    const service = {
+      ...value,
+      activeStatus: true,
+    };
+    dispatch(updateService({ ...service, id: id }))
       .then(unwrapResult)
       .then(() => {
         const log = {
+          fullname: userData.fullname,
           username: userData.username,
           operation: `Cập nhật thông tin dịch vụ ${value.serviceName}`,
         };
         dispatch(createLog(log));
+        dispatch(getService());
         navigate(-1);
       })
       .catch((error) => {

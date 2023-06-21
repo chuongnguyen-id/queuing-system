@@ -666,3 +666,36 @@ body {
 .fullheight-card {
   height: calc(100vh - 190px);
 }
+
+/* --------------------------------Popup Notification-------------------------------- */
+.ant-modal-content {
+  border-radius: 24px !important;
+}
+
+.ant-modal-body {
+  display: flex;
+  justify-content: center;
+  height: 275px;
+}
+
+.ant-modal-close-x {
+  color: #ff9138;
+}
+
+.popup-notification {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-notification {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ff9138;
+  color: #ffffff;
+  border-radius: 0 0 24px 24px;
+  height: 110px;
+}

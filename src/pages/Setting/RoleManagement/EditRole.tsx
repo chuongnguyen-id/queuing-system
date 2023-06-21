@@ -18,6 +18,7 @@ import { useAppDispatch } from "../../../store/store";
 import { useSelector } from "react-redux";
 import {
   RoleType,
+  getRole,
   getRoleById,
   updateRole,
 } from "../../../store/reducer/roleReducer";
@@ -53,10 +54,12 @@ const EditRoleManagement = () => {
       .then(unwrapResult)
       .then(() => {
         const log = {
+          fullname: userData.fullname,
           username: userData.username,
           operation: `Cập nhật thông tin vài trò ${value.roleName}`,
         };
         dispatch(createLog(log));
+        dispatch(getRole());
         navigate(-1);
       })
       .catch((error) => {

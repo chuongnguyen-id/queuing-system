@@ -3,6 +3,7 @@ import axios from "axios";
 
 export interface LogType {
   id?: string;
+  fullname?: string;
   username?: string;
   ipAddress?: string;
   operation?: string;

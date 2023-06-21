@@ -1,5 +1,5 @@
 import { Avatar, Card, Col, Form, Input, Row, Typography } from "antd";
-import avatar from "../../assets/images/bigavatar.png";
+import avatar from "../../assets/images/avatar.png";
 import { camera } from "../../components/icon/icon";
 import { useSelector } from "react-redux";
 
