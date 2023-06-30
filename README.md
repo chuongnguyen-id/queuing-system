@@ -5,7 +5,8 @@ Sequeing System
 ReactJS, Typescript, Redux, Firebase
 </p>
 Implemented queuing system for a hospital to streamline patient flow and improve efficiency. The system allowed patients to check-in and receive a queue number, reducing waiting times and providing a better patient experience.
-Demo: [zingy-klepon-9411ef.netlify.app](zingy-klepon-9411ef.netlify.app)
+
+Demo: [http://zingy-klepon-9411ef.netlify.app](http://zingy-klepon-9411ef.netlify.app)
 
 ## Technologies
 - [ReactJS](https://reactjs.org/) - A JavaScript library for building user interfaces
