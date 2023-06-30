@@ -1,3 +1,24 @@
+<h1 align="center">
+Sequeing System
+</h1>
+<p align="center">
+ReactJS, Typescript, Redux, Firebase
+</p>
+Implemented queuing system for a hospital to streamline patient flow and improve efficiency. The system allowed patients to check-in and receive a queue number, reducing waiting times and providing a better patient experience.
+Demo: zingy-klepon-9411ef.netlify.app
+
+## Technologies
+- [ReactJS](https://reactjs.org/) - A JavaScript library for building user interfaces
+- [Redux](https://redux.js.org/) - A predictable state container for JavaScript apps
+- [Typescript](https://www.typescriptlang.org/) - A strongly typed programming language that builds on JavaScript
+- [Ant Design](https://ant.design/) - React components for faster and easier web development
+- [Firebase](https://firebase.google.com/) - An app development platform that helps you build and grow apps and games
+
+## Features
+  - Register / Login / Forgot Password (Firebase-Auth)
+  - View / Add / Update Users, Devices, Services...
+  - View Dashboard, Reports, Logs
+  
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
