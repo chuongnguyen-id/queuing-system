@@ -6,7 +6,7 @@ ReactJS, Typescript, Redux, Firebase
 </p>
 Implemented queuing system for a hospital to streamline patient flow and improve efficiency. The system allowed patients to check-in and receive a queue number, reducing waiting times and providing a better patient experience.
 
-Demo: [http://zingy-klepon-9411ef.netlify.app](http://zingy-klepon-9411ef.netlify.app)<br/>
+Demo: [http://sequeingsystem.netlify.app](http://sequeingsystem.netlify.app)<br/>
 username: chuongnguyen.dc<br/>
 password: 123456
 
